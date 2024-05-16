@@ -1,0 +1,3 @@
+/Users/krzysztofsawicki/CLionProjects/inf_project/cmake-build-debug/CMakeFiles/inf_project.dir
+/Users/krzysztofsawicki/CLionProjects/inf_project/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/krzysztofsawicki/CLionProjects/inf_project/cmake-build-debug/CMakeFiles/rebuild_cache.dir

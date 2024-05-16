@@ -1,0 +1,6 @@
+# ninja log v5
+3	276	1715678114353186798	CMakeFiles/inf_project.dir/Source/GameObject.cpp.o	f49cb91fda794eb7
+3	285	1715678114361182940	CMakeFiles/inf_project.dir/Source/TimeSpace.cpp.o	a2071cd0ea16cf9a
+3	284	1715678114360808901	CMakeFiles/inf_project.dir/main.cpp.o	5d42f61a3af4a32b
+285	324	1715678114401851104	inf_project	175699449a0520da
+1	43	1715884343108280694	build.ninja	1b31705bd64c1dbb
