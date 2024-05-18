@@ -71,20 +71,229 @@ namespace TimeSpace
         return os;
     }
 
-    void GameTime::NextDay()
+    int GameTime::daysInMonth = 28;
+
+    // Method to get dayOfYear
+    int GameTime::getDayOfYear() const
     {
-        dayFromStart++;
-        dayOfYear++;
-        if(dayOfYear > 360)
+        return static_cast<int>(month) * daysInMonth + dayOfMonth;
+    }
+
+    // Method to get year
+    int GameTime::getYear() const
+    {
+        return year;
+    }
+
+    // Method to get dayOfWeek
+    Days GameTime::getDayOfWeek() const
+    {
+        return dayOfWeek;
+    }
+
+    int GameTime::getDayOfMonth() const
+    {
+        return dayOfMonth;
+    }
+
+    // Method to get month
+    Months GameTime::getMonth() const
+    {
+        return month;
+    }
+
+    // Method to get season
+    Seasons GameTime::getSeason() const
+    {
+        int monthID = static_cast<int>(month);
+        //shifting the months by 10, so the winter will start in December
+        return static_cast<Seasons>((monthID + 10) % 12 / 3);
+    }
+
+    // Method to get difference between two dates in years (absolute value)
+    int GameTime::yearDifference(const GameTime& time1, const GameTime& time2)
+    {
+        int difference = abs(time1.year - time2.year);
+        if(time1 > time2)
         {
-            dayOfYear = 0;
-            year++;
+            if(time1.month < time2.month || (time1.month == time2.month && time1.dayOfMonth < time2.dayOfMonth))
+            {
+                difference--;
+            }
+        } else if(time1 != time2)
+        {
+            if(time1.month > time2.month || (time1.month == time2.month && time1.dayOfMonth > time2.dayOfMonth))
+            {
+                difference--;
+            }
+        }
+        if(difference < 0)
+        {
+            difference = 0;
         }
 
-        int dayID = dayFromStart % 7;
+        return difference;
+    }
 
-        day = static_cast<Days>(dayID);
+    // Method to get difference between two dates in months (absolute value)
+    int GameTime::monthDifference(const GameTime& time1, const GameTime& time2)
+    {
+        int difference = yearDifference(time1, time2) * 12;
+        if(time1.year == time2.year)
+        {
+            difference += abs(static_cast<int>(time1.month) - static_cast<int>(time2.month));
+        }
+        else
+        {
+            if(time1.month > time2.month)
+            {
+                difference += abs(static_cast<int>(time1.month) - static_cast<int>(time2.month));
+            }
+            else
+            {
+                difference +=  abs(static_cast<int>(time1.month) - static_cast<int>(time2.month));
+            }
+        }
+
+        if(time1.month == time2.month)
+        {
+            if(time1.dayOfMonth < time2.dayOfMonth)
+            {
+                difference--;
+            }
+        }
+
+        if(difference < 0)
+        {
+            difference = 0;
+        }
+        return difference;
+    }
+
+    // Method to get difference between two dates in days (absolute value)
+    int GameTime::dayDifference(const GameTime& time1, const GameTime& time2)
+    {
+        int difference = monthDifference(time1, time2) * daysInMonth;
+        difference += abs(time1.dayOfMonth - time2.dayOfMonth);
+        return difference;
+    }
+
+    // operator to compare two dates for equality
+    bool GameTime::operator==(const GameTime& other) const
+    {
+        return dayOfMonth == other.dayOfMonth && month == other.month && year == other.year;
+    }
+    // operator to compare two dates for inequality
+    bool GameTime::operator!=(const GameTime& other) const
+    {
+        return !(*this == other);
+    }
+    // operator to compare two dates for later date
+    bool GameTime::operator>(const GameTime& other) const
+    {
+        if(year > other.year)
+        {
+            return true;
+        }
+        else if(year == other.year)
+        {
+            if(static_cast<int>(month) > static_cast<int>(other.month))
+            {
+                return true;
+            }
+            else if(month == other.month)
+            {
+                if(dayOfMonth > other.dayOfMonth)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    // operator to compare two dates for earlier date
+    bool GameTime::operator<(const GameTime& other) const
+    {
+        return !(*this > other) && *this != other;
+    }
+
+    GameTime::GameTime(int dayOfMonth, Months month, int year, Days dayOfWeek)
+    {
+        this->dayOfMonth = dayOfMonth;
+        this->month = month;
+        this->year = year;
+        this->dayOfWeek = dayOfWeek;
+    }
+
+    GameTime::~GameTime()
+    {
+
+    }
+
+    // Method to set time on the next day
+    void GameTime::NextDay()
+    {
+        // Increment dayOfMonth
+        dayOfMonth++;
+
+        // If dayOfMonth is more than daysInMonth, reset it to 0 and increment month
+        if(dayOfMonth > daysInMonth)
+        {
+            dayOfMonth = 0;
+
+            // Increment month and check if it is more than 11
+            int monthID = static_cast<int>(month);
+            monthID++;
+            if(monthID > 11)
+            {
+                // If it is more than 11, reset it to 0 and increment year
+                monthID = 0;
+                year++;
+            }
+            month = static_cast<Months>(monthID);
+        }
+
+        // Calculate dayID and set dayOfWeek
+        int dayID = static_cast<int>(dayOfWeek) + 1 % 7;
+        dayOfWeek = static_cast<Days>(dayID);
+    }
+
+    GameTimeSystem::GameTimeSystem(GameTime& startTime)
+    {
+        currentTime = new GameTime(startTime);
+        this->startTime = new GameTime(startTime);
+        dayFromStart = 0;
+    }
+
+    GameTimeSystem::~GameTimeSystem()
+    {
+        delete currentTime;
+        delete startTime;
+    }
+
+    // Method to set time on the next day
+    void GameTimeSystem::NextDay()
+    {
+        currentTime->NextDay();
+        dayFromStart++;
+    }
+
+    // Method to get currentTime
+    GameTime* GameTimeSystem::getCurrentTime() const
+    {
+        return currentTime;
+    }
+
+    // Method to get startTime
+    GameTime* GameTimeSystem::getStartTime() const
+    {
+        return startTime;
     }
 
 
+    // Method to get dayFromStart
+    int GameTimeSystem::getDayFromStart() const
+    {
+        return dayFromStart;
+    }
 }

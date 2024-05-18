@@ -56,69 +56,63 @@ namespace TimeSpace
 
     class GameTime
     {
-        int dayFromStart;
-        int dayOfYear;
+    protected:
+        static int daysInMonth;
+
+        int dayOfMonth;
+        Months month;
         int year;
-        Days day;
+        Days dayOfWeek;
 
     public:
-        GameTime()
-        {
-            dayFromStart = 0;
-            dayOfYear = 0;
-            year = 0;
-            day = Days::Monday;
-        }
-        ~GameTime()
-        {
+        // set the number of days in the month
+        static void SetDaysInMonth(int daysInMonth);
+        // get the number of days in the month
+        static int GetDaysInMonth();
+        // get difference between two dates in years (absolute value)
+        static int yearDifference(const GameTime& time1, const GameTime& time2);
+        // get difference between two dates in months (absolute value)
+        static int monthDifference(const GameTime& time1, const GameTime& time2);
+        // get difference between two dates in days (absolute value)
+        static int dayDifference(const GameTime& time1, const GameTime& time2);
 
-        }
+        bool operator==(const GameTime& other) const;
+        bool operator!=(const GameTime& other) const;
+        // later date
+        bool operator>(const GameTime& other) const;
+        // earlier date
+        bool operator<(const GameTime& other) const;
+
+        GameTime(int dayOfMonth, Months month, int year, Days dayOfWeek);
+        ~GameTime();
+
+        void NextDay();
+
+        int getDayOfMonth() const;
+        Months getMonth() const;
+        int getYear() const;
+        Days getDayOfWeek() const;
+        Seasons getSeason() const;
+        int getDayOfYear() const;
+    };
+
+    class GameTimeSystem
+    {
+        int dayFromStart;
+        GameTime* currentTime;
+        GameTime* startTime;
+
+    public:
+        GameTimeSystem(GameTime& startTime);
+        ~GameTimeSystem();
 
         // set time on the next day
         void NextDay();
 
-        int getDayFromStart() const
-        {
-            return dayFromStart;
-        }
-        int getDayOfYear() const
-        {
-            return dayOfYear;
-        }
-        int getYear() const
-        {
-            return year;
-        }
-        Days getDay() const
-        {
-            return day;
-        }
-        Months getMonth() const
-        {
-            int monthID = dayOfYear / 30;
-            if (monthID > 11)
-            {
-                monthID = 11;
-            }
+        int getDayFromStart() const;
 
-            return static_cast<Months>(monthID);
-        }
-
-        int getDayOfMonth() const
-        {
-            return dayOfYear % 30;
-        }
-
-        Seasons getSeason() const
-        {
-            int monthID = dayOfYear / 30;
-            if (monthID > 11)
-            {
-                monthID = 11;
-            }
-
-            return static_cast<Seasons>(monthID / 3);
-        }
+        GameTime* getCurrentTime() const;
+        GameTime* getStartTime() const;
     };
 }
 

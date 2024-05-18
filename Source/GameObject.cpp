@@ -4,10 +4,22 @@
 
 #include "../Headers/GameObject.h"
 
+unsigned int GameObject::newID = 0;
 
-GameObject::GameObject()
+GameObject::GameObject(const std::string& name) : ID(newID)
 {
-    // Constructor
+    newID++;
+    this->name = name;
+}
+
+int GameObject::getID() const
+{
+    return ID;
+}
+
+std::string GameObject::getName() const
+{
+    return name;
 }
 
 GameObject::~GameObject()
@@ -25,7 +37,7 @@ void GameObject::Update(double deltaTime)
     // Update
 }
 
-void GameObject::RoundUpdate(const TimeSpace::GameTime& gameTime)
+void GameObject::RoundUpdate(const TimeSpace::GameTimeSystem& gameTime)
 {
     // RoundUpdate
 }

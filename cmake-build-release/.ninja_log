@@ -1,0 +1,9 @@
+# ninja log v5
+1	245	1715968576034953361	CMakeFiles/inf_project.dir/Source/TimeSpace.cpp.o	93d83a0e8b018c7c
+1	247	1715968576036403264	CMakeFiles/inf_project.dir/Source/GameNameHolder.cpp.o	1f954ce5d8311daf
+1	263	1715968576052849184	CMakeFiles/inf_project.dir/Source/RandomNumberGenerator.cpp.o	acbbfd11f8482a78
+2	265	1715969091153521808	CMakeFiles/inf_project.dir/Source/GameObject.cpp.o	721e9b881a88b637
+4	328	1715969753556734900	CMakeFiles/inf_project.dir/Source/Agent.cpp.o	e531e73de2598fd8
+4	380	1715969753607751562	CMakeFiles/inf_project.dir/Source/Instance.cpp.o	652a18a4e4ba6a49
+3	641	1715969996984387265	CMakeFiles/inf_project.dir/main.cpp.o	8f81afdb9f23a538
+641	672	1715969997019126828	inf_project	f949aa8726f1d31e
