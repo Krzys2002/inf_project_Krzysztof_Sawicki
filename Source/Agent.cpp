@@ -9,9 +9,19 @@ Agent::Agent(unsigned int seed, std::string name, Instance* currentInstance) : G
     this->currentInstance = currentInstance;
 }
 
+unsigned int Agent::GetSeed() const
+{
+    return seed;
+}
+
 Agent::~Agent()
 {
     // Destructor
+}
+
+void Agent::RoundUpdate(const TimeSpace::GameTimeSystem* gameTime)
+{
+    // RoundUpdate
 }
 
 Instance* Agent::GetCurrentInstance() const

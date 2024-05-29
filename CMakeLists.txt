@@ -22,6 +22,18 @@ add_executable(inf_project main.cpp
         UI/Headers/ListItem.h
         UI/Source/CustomClickableWidget.cpp
         UI/Headers/CustomClickableWidget.h
+        Source/Game.cpp
+        Headers/Game.h
+        UI/Source/UIManager.cpp
+        UI/Headers/UIManager.h
+        UI/Source/ListPanel.cpp
+        UI/Headers/ListPanel.h
+        UI/Source/InfoPanel.cpp
+        UI/Headers/InfoPanel.h
+        Source/City.cpp
+        Headers/City.h
+        Source/Tavern.cpp
+        Headers/Tavern.h
 )
 
 target_link_libraries(inf_project PRIVATE sfml-graphics sfml-audio TGUI::TGUI)

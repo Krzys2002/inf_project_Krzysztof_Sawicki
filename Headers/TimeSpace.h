@@ -103,16 +103,16 @@ namespace TimeSpace
         GameTime* startTime;
 
     public:
-        GameTimeSystem(GameTime& startTime);
+        GameTimeSystem(GameTime startTime);
         ~GameTimeSystem();
 
         // set time on the next day
         void NextDay();
 
-        int getDayFromStart() const;
+        int getDayFromStart();
 
-        GameTime* getCurrentTime() const;
-        GameTime* getStartTime() const;
+        GameTime* getCurrentTime();
+        GameTime* getStartTime();
     };
 }
 

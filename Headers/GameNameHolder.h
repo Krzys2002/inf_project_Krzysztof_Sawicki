@@ -16,6 +16,7 @@ public:
 
     static std::string GetRandomInstanceName(unsigned int seed = 0);
     static std::string GetRandomAgentName(unsigned int seed = 0);
+    static std::string GetRandomTavernName(unsigned int seed = 0);
 };
 
 #endif //INF_PROJECT_GAMENAMEHOLDER_H

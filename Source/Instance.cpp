@@ -4,7 +4,7 @@
 
 #include "../Headers/Instance.h"
 
-Instance::Instance(unsigned int seed, std::string name, Instance* parentInstance, bool hasIndependentPopulation) : GameObject(name)
+Instance::Instance(unsigned int seed, std::string name, std::shared_ptr<Instance> parentInstance, bool hasIndependentPopulation) : GameObject(name), seed(seed)
 {
     this->parentInstance = parentInstance;
     this->hasIndependentPopulation = hasIndependentPopulation;
@@ -15,15 +15,45 @@ Instance::Instance(unsigned int seed, std::string name, Instance* parentInstance
         seedTable.push_back(rng.generate());
         seedUsed.push_back(false);
     }
-
 }
 
-Instance* Instance::GetParentInstance() const
+void Instance::Ready()
+{
+    // Ready
+    // this check is necessary to set Ready only one time to any Agent
+    if(hasIndependentPopulation)
+    {
+        // call Ready on all agents
+        for (auto agent : busyAgents)
+        {
+            agent->Ready();
+        }
+    }
+}
+
+void Instance::RoundUpdate(const TimeSpace::GameTimeSystem* gameTime)
+{
+    // RoundUpdate
+    if(hasIndependentPopulation)
+    {
+        for (auto agent : busyAgents)
+        {
+            agent->RoundUpdate(gameTime);
+        }
+    }
+}
+
+std::vector<std::shared_ptr<Instance>> Instance::getChildrenInstances()
+{
+    return childrenInstances;
+}
+
+std::shared_ptr<Instance> Instance::GetParentInstance()
 {
     return parentInstance;
 }
 
-Agent* Instance::getFreeRandomAgent(unsigned int seed)
+std::shared_ptr<Agent> Instance::getFreeRandomAgent(unsigned int seed)
 {
     if(hasIndependentPopulation)
     {
@@ -33,12 +63,10 @@ Agent* Instance::getFreeRandomAgent(unsigned int seed)
         }
 
         RandomNumberGenerator rng(seed);
-        unsigned int index = RandomNumberGenerator::getRandomIndex(&rng, seedUsed);
-        seedUsed[index] = true;
-        rng = RandomNumberGenerator(seedTable[index]);
+        seed = rng.generate();
 
-        Agent *agent = new Agent(seedTable[index], GameNameHolder::GetRandomAgentName(rng.generate()), this);
-        busyAgents.push_back(agent);
+        std::shared_ptr<Agent> agent = std::make_shared<Agent>(seed, GameNameHolder::GetRandomAgentName(seed), this);
+        busyAgents.emplace_back(agent);
         return agent;
     }
     else
@@ -48,7 +76,7 @@ Agent* Instance::getFreeRandomAgent(unsigned int seed)
             return nullptr;
         }
 
-        Agent* agent = parentInstance->getFreeRandomAgent(seed);
+        std::shared_ptr<Agent> agent = parentInstance->getFreeRandomAgent(seed);
         if(agent != nullptr)
         {
             agent->SetInstance(this);
@@ -58,7 +86,7 @@ Agent* Instance::getFreeRandomAgent(unsigned int seed)
     }
 }
 
-Agent* Instance::getFreeRandomAgent()
+std::shared_ptr<Agent> Instance::getFreeRandomAgent()
 {
     RandomNumberGenerator rng;
     return getFreeRandomAgent(rng.generate());
@@ -68,31 +96,23 @@ void Instance::freeAllAgents()
 {
     for(auto agent : busyAgents)
     {
-        delete agent;
+        agent.reset();
     }
     busyAgents.clear();
 }
 
-void Instance::freeAgent(Agent* agent)
+void Instance::freeAgent(std::shared_ptr<Agent> agent)
 {
     busyAgents.erase(std::remove(busyAgents.begin(), busyAgents.end(), agent), busyAgents.end());
-    delete agent;
+    agent.reset();
 }
 
-std::vector<Agent*> Instance::getBusyAgents() const
+std::vector<std::shared_ptr<Agent>> Instance::getBusyAgents() const
 {
     return busyAgents;
 }
 
 Instance::~Instance()
 {
-    for(auto agent : busyAgents)
-    {
-        delete agent;
-    }
-
-    for(auto instance : childrenInstances)
-    {
-        delete instance;
-    }
+    // Destructor
 }

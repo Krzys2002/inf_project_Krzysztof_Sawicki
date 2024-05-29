@@ -22,6 +22,9 @@ public:
     // Destructor
     ~Agent();
 
+    // Update every Round
+    void RoundUpdate(const TimeSpace::GameTimeSystem* gameTime) override;
+
     // Get the current instance
     Instance* GetCurrentInstance() const;
     // get the seed of the agent

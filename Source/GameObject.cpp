@@ -37,7 +37,7 @@ void GameObject::Update(double deltaTime)
     // Update
 }
 
-void GameObject::RoundUpdate(const TimeSpace::GameTimeSystem& gameTime)
+void GameObject::RoundUpdate(const TimeSpace::GameTimeSystem* gameTime)
 {
     // RoundUpdate
 }

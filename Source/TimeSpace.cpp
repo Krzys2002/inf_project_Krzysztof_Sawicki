@@ -258,7 +258,7 @@ namespace TimeSpace
         dayOfWeek = static_cast<Days>(dayID);
     }
 
-    GameTimeSystem::GameTimeSystem(GameTime& startTime)
+    GameTimeSystem::GameTimeSystem(GameTime startTime)
     {
         currentTime = new GameTime(startTime);
         this->startTime = new GameTime(startTime);
@@ -279,20 +279,20 @@ namespace TimeSpace
     }
 
     // Method to get currentTime
-    GameTime* GameTimeSystem::getCurrentTime() const
+    GameTime* GameTimeSystem::getCurrentTime()
     {
         return currentTime;
     }
 
     // Method to get startTime
-    GameTime* GameTimeSystem::getStartTime() const
+    GameTime* GameTimeSystem::getStartTime()
     {
         return startTime;
     }
 
 
     // Method to get dayFromStart
-    int GameTimeSystem::getDayFromStart() const
+    int GameTimeSystem::getDayFromStart()
     {
         return dayFromStart;
     }

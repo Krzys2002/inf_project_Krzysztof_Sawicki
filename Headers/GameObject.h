@@ -33,7 +33,7 @@ public:
     virtual void Update(double deltaTime);
 
     // call every round (day)
-    virtual void RoundUpdate(const TimeSpace::GameTimeSystem& gameTime);
+    virtual void RoundUpdate(const TimeSpace::GameTimeSystem* gameTime);
     ~GameObject();
 };
 
