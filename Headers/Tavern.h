@@ -20,7 +20,7 @@ public:
     void Ready() override;
 
     // RoundUpdate call on every round
-    void RoundUpdate(const TimeSpace::GameTimeSystem* gameTime) override;
+    void RoundUpdate(TimeSpace::GameTimeSystem& gameTime) override;
 
 };
 

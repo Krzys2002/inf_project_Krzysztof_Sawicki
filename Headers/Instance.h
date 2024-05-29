@@ -21,8 +21,8 @@ protected:
     bool hasIndependentPopulation;
     std::vector<std::shared_ptr<Instance>> childrenInstances;
     std::vector<std::shared_ptr<Agent>> busyAgents;
-    std::vector<unsigned int> seedTable;
-    std::vector<bool> seedUsed;
+    std::vector<unsigned int> idPool;
+    std::vector<bool> idUsed;
 
 public:
     // Constructor
@@ -35,12 +35,15 @@ public:
     void Ready() override;
 
     // RoundUpdate call on every round
-    void RoundUpdate(const TimeSpace::GameTimeSystem* gameTime) override;
+    void RoundUpdate(TimeSpace::GameTimeSystem& gameTime) override;
 
     // Get the parent instance
     std::shared_ptr<Instance> GetParentInstance();
     // Get the children instances
     std::vector<std::shared_ptr<Instance>> getChildrenInstances();
+
+    // Method to reserve ID pool for agents
+    static std::vector<unsigned int> getIDPool(unsigned int size);
 
     // Method to get agent from the instance if any free agent is available with seed (if not it returns nullptr)
     virtual std::shared_ptr<Agent> getFreeRandomAgent(unsigned int seed);

@@ -4,7 +4,12 @@
 
 #include "../Headers/Agent.h"
 
-Agent::Agent(unsigned int seed, std::string name, Instance* currentInstance) : GameObject(name), seed(seed)
+Agent::Agent(unsigned int seed, std::string name, std::shared_ptr<Instance> currentInstance) : GameObject(name), seed(seed)
+{
+    this->currentInstance = currentInstance;
+}
+
+Agent::Agent(unsigned int ID, unsigned int seed, std::string name, std::shared_ptr<Instance> currentInstance) : GameObject(ID, name), seed(seed)
 {
     this->currentInstance = currentInstance;
 }
@@ -19,17 +24,17 @@ Agent::~Agent()
     // Destructor
 }
 
-void Agent::RoundUpdate(const TimeSpace::GameTimeSystem* gameTime)
+void Agent::RoundUpdate(TimeSpace::GameTimeSystem& gameTime)
 {
     // RoundUpdate
 }
 
-Instance* Agent::GetCurrentInstance() const
+std::shared_ptr<Instance> Agent::GetCurrentInstance() const
 {
     return currentInstance;
 }
 
-void Agent::SetInstance(Instance* newInstance)
+void Agent::SetInstance(std::shared_ptr<Instance> newInstance)
 {
     currentInstance = newInstance;
 }

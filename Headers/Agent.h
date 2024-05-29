@@ -13,25 +13,26 @@ class Instance;  // Forward declaration of Instance
 class Agent : public GameObject
 {
 protected:
-    Instance* currentInstance;
+    std::shared_ptr<Instance> currentInstance;
     const unsigned int seed;
 public:
     // Constructor
-    Agent(unsigned int seed, std::string name, Instance* currentInstance);
+    Agent(unsigned int seed, std::string name, std::shared_ptr<Instance> currentInstance);
+    Agent(unsigned int ID, unsigned int seed, std::string name, std::shared_ptr<Instance> currentInstance);
 
     // Destructor
     ~Agent();
 
     // Update every Round
-    void RoundUpdate(const TimeSpace::GameTimeSystem* gameTime) override;
+    void RoundUpdate(TimeSpace::GameTimeSystem& gameTime) override;
 
     // Get the current instance
-    Instance* GetCurrentInstance() const;
+    std::shared_ptr<Instance> GetCurrentInstance() const;
     // get the seed of the agent
     unsigned int GetSeed() const;
 
     // Set the current instance
-    void SetInstance(Instance* newInstance);
+    void SetInstance(std::shared_ptr<Instance> newInstance);
 };
 
 

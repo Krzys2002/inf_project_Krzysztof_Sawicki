@@ -21,7 +21,7 @@ Game::Game()
     instances.push_back(city->CreateTavern());
     instances.push_back(city);
 
-    std::vector<std::shared_ptr<GameObject>> gameObjects(instances.begin(), instances.end());
+    std::vector<std::weak_ptr<GameObject>> gameObjects(instances.begin(), instances.end());
     std::string title = "test";
     uiManager->ListGameObjectsOnPanel(MainPanelIndex::LEFT, title, gameObjects);
     uiManager->setPanelToViewObjectInfoFor(MainPanelIndex::LEFT, MainPanelIndex::RIGHT);
@@ -64,7 +64,7 @@ void Game::NextRound()
     gameTime->NextDay();
     for (auto& instance : instances)
     {
-        instance->RoundUpdate(gameTime);
+        instance->RoundUpdate(*gameTime);
     }
 }
 

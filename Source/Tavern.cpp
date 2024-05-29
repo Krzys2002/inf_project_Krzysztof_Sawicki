@@ -20,16 +20,16 @@ void Tavern::Ready()
 {
     for (int i = 0; i < maxPopulation; ++i)
     {
-        auto agent = parentInstance->getFreeRandomAgent();
+        auto agent = parentInstance->getFreeRandomAgent(seed + busyAgents.size());
         if (agent != nullptr)
         {
-            agent->SetInstance(this);
+            agent->SetInstance(std::static_pointer_cast<Instance>(shared_from_this()));
             busyAgents.push_back(agent);
         }
     }
 }
 
-void Tavern::RoundUpdate(const TimeSpace::GameTimeSystem* gameTime)
+void Tavern::RoundUpdate(TimeSpace::GameTimeSystem& gameTime)
 {
     // Method to update every round
     for (auto& agent : busyAgents)
@@ -37,4 +37,14 @@ void Tavern::RoundUpdate(const TimeSpace::GameTimeSystem* gameTime)
         parentInstance->freeAgent(agent);
     }
     busyAgents.clear();
+
+    for (int i = 0; i < maxPopulation; ++i)
+    {
+        auto agent = parentInstance->getFreeRandomAgent(seed + busyAgents.size() + gameTime.getDayFromStart());
+        if (agent != nullptr)
+        {
+            agent->SetInstance(std::static_pointer_cast<Instance>(shared_from_this()));
+            busyAgents.push_back(agent);
+        }
+    }
 }

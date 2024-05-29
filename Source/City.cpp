@@ -21,19 +21,19 @@ void City::Ready()
 
 void City::freeAllAgents()
 {
-    // Method Free all agents from the instance
-    for (auto& agent : busyAgents)
+    for(auto agent : busyAgents)
     {
-        agent->SetInstance(nullptr);
+        agent.reset();
     }
+
+    idUsed = std::vector<bool>(maxPopulation, false);
+    busyAgents.clear();
 }
 
 void City::freeAgent(std::shared_ptr<Agent> agent)
 {
     // Method Free agent from the instance
-    agent->SetInstance(nullptr);
-    busyAgents.erase(std::remove(busyAgents.begin(), busyAgents.end(), agent), busyAgents.end());
-    agent.reset();
+    Instance::freeAgent(agent);
 }
 
 std::vector<std::shared_ptr<Agent>> City::getBusyAgents() const
@@ -57,7 +57,7 @@ std::shared_ptr<Agent> City::getFreeRandomAgent(unsigned int seed)
 std::shared_ptr<Tavern> City::CreateTavern()
 {
     // Method to create tavern
-    auto tavern = std::make_shared<Tavern>(seedTable[0], GameNameHolder::GetRandomTavernName(), std::static_pointer_cast<Instance>(shared_from_this()));
+    auto tavern = std::make_shared<Tavern>(seed + childrenInstances.size(), GameNameHolder::GetRandomTavernName(seed + childrenInstances.size()), std::static_pointer_cast<Instance>(shared_from_this()));
     childrenInstances.push_back(tavern);
     return tavern;
 }

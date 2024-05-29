@@ -12,6 +12,11 @@ GameObject::GameObject(const std::string& name) : ID(newID)
     this->name = name;
 }
 
+GameObject::GameObject(unsigned int ID, const std::string& name) : ID(ID)
+{
+    this->name = name;
+}
+
 int GameObject::getID() const
 {
     return ID;
@@ -37,7 +42,7 @@ void GameObject::Update(double deltaTime)
     // Update
 }
 
-void GameObject::RoundUpdate(const TimeSpace::GameTimeSystem* gameTime)
+void GameObject::RoundUpdate(TimeSpace::GameTimeSystem& gameTime)
 {
     // RoundUpdate
 }

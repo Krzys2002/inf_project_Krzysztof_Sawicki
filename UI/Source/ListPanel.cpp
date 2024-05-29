@@ -40,9 +40,11 @@ void ListPanel::setTitleBordSize(tgui::Layout size)
     listBox->setSize("100%", "100%" - size);
 }
 
-void ListPanel::addItem(std::shared_ptr<GameObject>& item)
+void ListPanel::addItem(std::weak_ptr<GameObject> item)
 {
-    std::string text = "Name: " + item->getName() + " ID: " + std::to_string(item->getID());
+    if(!item.lock())
+        return;
+    std::string text = "Name: " + item.lock()->getName() + " ID: " + std::to_string(item.lock()->getID());
     listBox->addItem(text);
     items.push_back(item);
 }
@@ -64,7 +66,7 @@ ListPanel::Ptr ListPanel::create()
     return std::make_shared<ListPanel>();
 }
 
-void ListPanel::addFunctionOnSelected(std::function<void(std::shared_ptr<GameObject>)> function)
+void ListPanel::addFunctionOnSelected(std::function<void(std::weak_ptr<GameObject>)> function)
 {
     listBox->onItemSelect([this, function](int index){
         if(index < 0 || index >= items.size())

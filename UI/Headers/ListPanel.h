@@ -12,7 +12,7 @@ class ListPanel : public tgui::ScrollablePanel
 {
     tgui::ListBox::Ptr listBox;
     tgui::Label::Ptr Title;
-    std::vector<std::shared_ptr<GameObject>> items;
+    std::vector<std::weak_ptr<GameObject>> items;
     std::string title;
 
 public:
@@ -20,13 +20,13 @@ public:
 
     ListPanel();
 
-    void addItem(std::shared_ptr<GameObject>& item);
+    void addItem(std::weak_ptr<GameObject> item);
     void setTitle(const std::string& title);
     void setTitleSize(unsigned int size);
     void setTitleBordSize(tgui::Layout size);
     void clearItems();
 
-    void addFunctionOnSelected(std::function<void(std::shared_ptr<GameObject>)> function);
+    void addFunctionOnSelected(std::function<void(std::weak_ptr<GameObject>)> function);
 
     static Ptr create();
 };

@@ -4,16 +4,29 @@
 
 #include "../Headers/Instance.h"
 
+std::vector<unsigned int> Instance::getIDPool(unsigned int size)
+{
+    std::vector<unsigned int> pool(size);
+
+    for (int i = 0; i < size; ++i)
+    {
+        pool[i] = newID;
+        newID++;
+    }
+
+    return pool;
+}
+
 Instance::Instance(unsigned int seed, std::string name, std::shared_ptr<Instance> parentInstance, bool hasIndependentPopulation) : GameObject(name), seed(seed)
 {
     this->parentInstance = parentInstance;
     this->hasIndependentPopulation = hasIndependentPopulation;
     RandomNumberGenerator rng(seed);
     maxPopulation = rng.generate(100, 1000);
-    for (int i = 0; i < 100; ++i)
+    if(hasIndependentPopulation)
     {
-        seedTable.push_back(rng.generate());
-        seedUsed.push_back(false);
+        idPool = getIDPool(maxPopulation);
+        idUsed = std::vector<bool>(maxPopulation, false);
     }
 }
 
@@ -31,7 +44,7 @@ void Instance::Ready()
     }
 }
 
-void Instance::RoundUpdate(const TimeSpace::GameTimeSystem* gameTime)
+void Instance::RoundUpdate(TimeSpace::GameTimeSystem& gameTime)
 {
     // RoundUpdate
     if(hasIndependentPopulation)
@@ -62,12 +75,16 @@ std::shared_ptr<Agent> Instance::getFreeRandomAgent(unsigned int seed)
             return nullptr;
         }
 
-        RandomNumberGenerator rng(seed);
-        seed = rng.generate();
+        while (idUsed[seed % maxPopulation])
+        {
+            seed++;
+        }
 
-        std::shared_ptr<Agent> agent = std::make_shared<Agent>(seed, GameNameHolder::GetRandomAgentName(seed), this);
+        auto agent = std::make_shared<Agent>(idPool[seed % maxPopulation], seed, GameNameHolder::GetRandomAgentName(seed),
+                                             std::static_pointer_cast<Instance>(shared_from_this()));
+        idUsed[seed % maxPopulation] = true;
         busyAgents.emplace_back(agent);
-        return agent;
+        return  agent;
     }
     else
     {
@@ -79,7 +96,7 @@ std::shared_ptr<Agent> Instance::getFreeRandomAgent(unsigned int seed)
         std::shared_ptr<Agent> agent = parentInstance->getFreeRandomAgent(seed);
         if(agent != nullptr)
         {
-            agent->SetInstance(this);
+            agent->SetInstance(std::static_pointer_cast<Instance>(shared_from_this()));
             busyAgents.push_back(agent);
             return agent;
         }
@@ -104,6 +121,7 @@ void Instance::freeAllAgents()
 void Instance::freeAgent(std::shared_ptr<Agent> agent)
 {
     busyAgents.erase(std::remove(busyAgents.begin(), busyAgents.end(), agent), busyAgents.end());
+    idUsed[agent->GetSeed() % maxPopulation] = false;
     agent.reset();
 }
 

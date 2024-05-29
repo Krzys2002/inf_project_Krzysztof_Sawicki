@@ -99,7 +99,7 @@ tgui::Gui& UIManager::getGui()
     return gui;
 }
 
-void UIManager::ListGameObjectsOnPanel(MainPanelIndex panelIndex, std::string title, std::vector<std::shared_ptr<GameObject>>& gameObjects)
+void UIManager::ListGameObjectsOnPanel(MainPanelIndex panelIndex, std::string title, std::vector<std::weak_ptr<GameObject>>& gameObjects)
 {
     // Create a new ListPanel and add items to it
     ListPanel::Ptr temp = ListPanel::create();
@@ -142,32 +142,30 @@ void UIManager::ListGameObjectsOnPanel(MainPanelIndex panelIndex, std::string ti
     }
 }
 
-void UIManager::viewObjectInfo(MainPanelIndex indexOfPanel, std::shared_ptr<GameObject> &gameObject)
+void UIManager::viewObjectInfo(MainPanelIndex indexOfPanel, std::weak_ptr<GameObject> gameObject)
 {
-    Instance* instance = dynamic_cast<Instance*>(gameObject.get());
-
-    if(instance != nullptr)
+    if(std::shared_ptr<Instance> instance = std::dynamic_pointer_cast<Instance>(gameObject.lock()))
     {
         viewInstanceInfo(indexOfPanel, instance);
         return;
     }
 
-    Agent* agent = dynamic_cast<Agent*>(gameObject.get());
-
-    if(agent != nullptr)
+    if(std::shared_ptr<Agent> agent = std::dynamic_pointer_cast<Agent>(gameObject.lock()))
     {
         viewAgentInfo(indexOfPanel, agent);
         return;
     }
 
-    viewGameObjectInfo(indexOfPanel, gameObject.get());
+    viewGameObjectInfo(indexOfPanel, gameObject.lock());
 }
 
-void UIManager::viewGameObjectInfo(MainPanelIndex indexOfPanel, GameObject *gameObject)
+void UIManager::viewGameObjectInfo(MainPanelIndex indexOfPanel, std::weak_ptr<GameObject> gameObject)
 {
     InfoPanel::Ptr temp = InfoPanel::create(3,0, 0);
-    temp->setLabel(0, "ID: " + std::to_string(gameObject->getID()));
-    temp->setLabel(1, "Name: " + gameObject->getName());
+    if(!gameObject.lock())
+        return;
+    temp->setLabel(0, "ID: " + std::to_string(gameObject.lock()->getID()));
+    temp->setLabel(1, "Name: " + gameObject.lock()->getName());
     temp->setTitle("GameObject Info");
 
     switch (indexOfPanel)
@@ -202,12 +200,12 @@ void UIManager::viewGameObjectInfo(MainPanelIndex indexOfPanel, GameObject *game
     }
 }
 
-void UIManager::viewAgentInfo(MainPanelIndex indexOfPanel, Agent *agent)
+void UIManager::viewAgentInfo(MainPanelIndex indexOfPanel, std::weak_ptr<Agent> agent)
 {
     InfoPanel::Ptr temp = InfoPanel::create(3,0, 0);
-    temp->setLabel(0, "ID: " + std::to_string(agent->getID()));
-    temp->setLabel(1, "Name: " + agent->getName());
-    temp->setLabel(2, "Current Instance: " + agent->GetCurrentInstance()->getName());
+    temp->setLabel(0, "ID: " + std::to_string(agent.lock()->getID()));
+    temp->setLabel(1, "Name: " + agent.lock()->getName());
+    temp->setLabel(2, "Current Instance: " + agent.lock()->GetCurrentInstance()->getName());
     temp->setTitle("Agent Info");
 
     switch (indexOfPanel)
@@ -242,17 +240,17 @@ void UIManager::viewAgentInfo(MainPanelIndex indexOfPanel, Agent *agent)
     }
 }
 
-void UIManager::viewInstanceInfo(MainPanelIndex indexOfPanel, Instance *instance)
+void UIManager::viewInstanceInfo(MainPanelIndex indexOfPanel, std::weak_ptr<Instance> instance)
 {
     InfoPanel::Ptr temp = InfoPanel::create(3,2, 2);
-    temp->setLabel(0, "ID: " + std::to_string(instance->getID()));
-    temp->setLabel(1, "Name: " + instance->getName());
-    temp->setLabel(2, "Parent Instance: " + (instance->GetParentInstance() == nullptr ? "None" : instance->GetParentInstance()->getName()));
+    temp->setLabel(0, "ID: " + std::to_string(instance.lock()->getID()));
+    temp->setLabel(1, "Name: " + instance.lock()->getName());
+    temp->setLabel(2, "Parent Instance: " + (instance.lock()->GetParentInstance() == nullptr ? "None" : instance.lock()->GetParentInstance()->getName()));
     temp->setListBox(0, "Children Instances");
     temp->setButton(0, "View Children Instances");
     temp->setButtonCallback(0, [this, instance](){
-        std::vector<std::shared_ptr<GameObject>> children;
-        std::vector<std::shared_ptr<Instance>> childrenInstances = instance->getChildrenInstances();
+        std::vector<std::weak_ptr<GameObject>> children;
+        std::vector<std::shared_ptr<Instance>> childrenInstances = instance.lock()->getChildrenInstances();
         for(auto& child : childrenInstances)
         {
             children.push_back(child);
@@ -262,8 +260,8 @@ void UIManager::viewInstanceInfo(MainPanelIndex indexOfPanel, Instance *instance
     });
     temp->setButton(1, "View Busy Agents");
     temp->setButtonCallback(1, [this, instance](){
-        std::vector<std::shared_ptr<GameObject>> agents;
-        std::vector<std::shared_ptr<Agent>> busyAgents = instance->getBusyAgents();
+        std::vector<std::weak_ptr<GameObject>> agents;
+        std::vector<std::shared_ptr<Agent>> busyAgents = instance.lock()->getBusyAgents();
         for(auto& agent : busyAgents)
         {
             agents.push_back(agent);
@@ -271,13 +269,13 @@ void UIManager::viewInstanceInfo(MainPanelIndex indexOfPanel, Instance *instance
         this->ListGameObjectsOnPanel(MainPanelIndex::MIDDLE, "Busy Agents", agents);
         this->setPanelToViewObjectInfoFor(MainPanelIndex::MIDDLE, MainPanelIndex::RIGHT);
     });
-    std::vector<std::shared_ptr<Instance>> children = instance->getChildrenInstances();
+    std::vector<std::shared_ptr<Instance>> children = instance.lock()->getChildrenInstances();
     for(auto& child : children)
     {
         temp->addItemToListBox(0, std::make_shared<GameObject>(*child));
     }
     temp->setListBox(1, "Busy Agents");
-    std::vector<std::shared_ptr<Agent>> busyAgents = instance->getBusyAgents();
+    std::vector<std::shared_ptr<Agent>> busyAgents = instance.lock()->getBusyAgents();
     for(auto& agent : busyAgents)
     {
         temp->addItemToListBox(1, std::make_shared<GameObject>(*agent));
@@ -338,7 +336,7 @@ void UIManager::setPanelToViewObjectInfoFor(MainPanelIndex formIndex, MainPanelI
     if(listPanel == nullptr)
         return;
 
-    std::function<void(std::shared_ptr<GameObject>)> function = [this, toIndex](std::shared_ptr<GameObject> object){
+    std::function<void(std::weak_ptr<GameObject>)> function = [this, toIndex](std::weak_ptr<GameObject> object){
         this->viewObjectInfo(toIndex, object);
     };
 

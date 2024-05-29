@@ -44,12 +44,12 @@ public:
     ~UIManager();
 
     void start();
-    void ListGameObjectsOnPanel(MainPanelIndex panelIndex, std::string title, std::vector<std::shared_ptr<GameObject>>& gameObjects);
+    void ListGameObjectsOnPanel(MainPanelIndex panelIndex, std::string title, std::vector<std::weak_ptr<GameObject>>& gameObjects);
 
-    void viewObjectInfo(MainPanelIndex indexOfPanel, std::shared_ptr<GameObject>& gameObject);
-    void viewGameObjectInfo(MainPanelIndex indexOfPanel, GameObject* gameObject);
-    void viewAgentInfo(MainPanelIndex indexOfPanel, Agent* agent);
-    void viewInstanceInfo(MainPanelIndex indexOfPanel, Instance* instance);
+    void viewObjectInfo(MainPanelIndex indexOfPanel, std::weak_ptr<GameObject> gameObject);
+    void viewGameObjectInfo(MainPanelIndex indexOfPanel, std::weak_ptr<GameObject> gameObject);
+    void viewAgentInfo(MainPanelIndex indexOfPanel, std::weak_ptr<Agent> agent);
+    void viewInstanceInfo(MainPanelIndex indexOfPanel, std::weak_ptr<Instance> instance);
 
     void setPanelToViewObjectInfoFor(MainPanelIndex formIndex, MainPanelIndex toIndex);
 

@@ -13,13 +13,13 @@
 
 class GameObject
 {
-private:
-    static unsigned int newID;
 protected:
+    static unsigned int newID;
     const unsigned int ID;
     std::string name;
 public:
     GameObject(const std::string& name);
+    GameObject(unsigned int ID, const std::string& name);
 
     // get the ID of the object
     int getID() const;
@@ -33,7 +33,7 @@ public:
     virtual void Update(double deltaTime);
 
     // call every round (day)
-    virtual void RoundUpdate(const TimeSpace::GameTimeSystem* gameTime);
+    virtual void RoundUpdate(TimeSpace::GameTimeSystem& gameTime);
     ~GameObject();
 };
 
