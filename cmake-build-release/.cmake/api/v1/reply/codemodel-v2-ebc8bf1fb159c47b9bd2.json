@@ -6,7 +6,7 @@
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"jsonFile" : "directory-.-Release-f5ebdc15457944623624.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.28"
@@ -19,7 +19,7 @@
 					]
 				}
 			],
-			"name" : "Debug",
+			"name" : "Release",
 			"projects" : 
 			[
 				{
@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "inf_project::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-inf_project-Debug-e3835409efb95b2bba2a.json",
+					"jsonFile" : "target-inf_project-Release-9dcf3528147e8b3da6c0.json",
 					"name" : "inf_project",
 					"projectIndex" : 0
 				}
@@ -49,7 +49,7 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/Users/krzysztofsawicki/CLionProjects/inf_project/cmake-build-debug",
+		"build" : "/Users/krzysztofsawicki/CLionProjects/inf_project/cmake-build-release",
 		"source" : "/Users/krzysztofsawicki/CLionProjects/inf_project"
 	},
 	"version" : 

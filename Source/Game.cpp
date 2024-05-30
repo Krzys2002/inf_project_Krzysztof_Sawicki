@@ -7,36 +7,11 @@
 
 Game::Game()
 {
-    gameTime = new TimeSpace::GameTimeSystem(TimeSpace::GameTime(0, TimeSpace::Months::February, 0, TimeSpace::Days::Monday));
 
-    window = std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600), "Game");
 
-    uiManager = std::make_unique<UIManager>(this, window.get());
-    uiManager->start();
 
-    std::shared_ptr<City> city = std::make_shared<City>(0, "City");
-    instances.push_back(city->CreateTavern());
-    instances.push_back(city->CreateTavern());
-    instances.push_back(city->CreateTavern());
-    instances.push_back(city->CreateTavern());
-    instances.push_back(city);
-
-    std::vector<std::weak_ptr<GameObject>> gameObjects(instances.begin(), instances.end());
-    std::string title = "test";
-    uiManager->ListGameObjectsOnPanel(MainPanelIndex::LEFT, title, gameObjects);
-    uiManager->setPanelToViewObjectInfoFor(MainPanelIndex::LEFT, MainPanelIndex::RIGHT);
 //    uiManager->ListGameObjectsOnPanel(MainPanelIndex::MIDDLE, title, gameObjects);
 //    uiManager->ListGameObjectsOnPanel(MainPanelIndex::RIGHT, title, gameObjects);
-
-
-//
-
-    window->clear();
-    uiManager->getGui().draw();
-    window->display();
-//    uiManager->viewObjectInfo(MainPanelIndex::RIGHT, gameObjects[0]);
-//    uiManager->viewObjectInfo(MainPanelIndex::LEFT, gameObjects[1]);
-//    uiManager->viewObjectInfo(MainPanelIndex::MIDDLE, gameObjects[2]);
 }
 
 Game::~Game()
@@ -46,26 +21,41 @@ Game::~Game()
 
 void Game::start()
 {
-    std::vector<std::shared_ptr<GameObject>> gameObjects(instances.begin(), instances.end());
-    std::string title = "test";
-//    uiManager->ListGameObjectsOnPanel(MainPanelIndex::LEFT, title, gameObjects);
-//    uiManager->setPanelToViewObjectInfoFor(MainPanelIndex::LEFT, MainPanelIndex::RIGHT);
-    std::shared_ptr<GameObject> gameObject = std::dynamic_pointer_cast<GameObject>(instances[0]);
-//    uiManager->viewObjectInfo(MainPanelIndex::RIGHT, gameObject);
+    gameTime = new TimeSpace::GameTimeSystem(TimeSpace::GameTime(0, TimeSpace::Months::February, 0,
+                                                                 TimeSpace::Days::Monday));
+
+    window = std::make_unique<sf::RenderWindow>(sf::VideoMode(800, 600), "Game");
+
+    uiManager = std::make_unique<UIManager>(this, window.get());
+    uiManager->start();
+
+    createWorld();
 
     for (auto& instance : instances)
     {
-        instance->Ready();
+        instance->ready();
     }
+
+    std::vector<std::weak_ptr<GameObject>> gameObjects(instances.begin(), instances.end());
+
+    std::string title = "test";
+    uiManager->ListGameObjectsOnPanel(MainPanelIndex::LEFT, title, gameObjects);
+    uiManager->setPanelToViewObjectInfoFor(MainPanelIndex::LEFT, MainPanelIndex::RIGHT);
 }
 
 void Game::NextRound()
 {
-    gameTime->NextDay();
-    for (auto& instance : instances)
-    {
-        instance->RoundUpdate(*gameTime);
-    }
+    nextRoundThread = std::thread([&](){
+        isNextRoundThreadRunning = true;
+        gameTime->NextDay();
+        for (auto& instance : instances)
+        {
+            instance->roundUpdate(*gameTime);
+        }
+        isNextRoundThreadRunning = false;
+    });
+
+    uiManager->lockGui();
 }
 
 void Game::run()
@@ -81,8 +71,48 @@ void Game::run()
             uiManager->getGui().handleEvent(event);
         }
 
+        if(!isNextRoundThreadRunning && nextRoundThread.joinable())
+        {
+            nextRoundThread.join();
+            uiManager->unlockGui();
+        }
+
         window->clear();
         uiManager->getGui().draw();
         window->display();
     }
+}
+
+void Game::createWorld()
+{
+    if(worldSettings == nullptr)
+    {
+        worldSettings = std::make_unique<WorldSettings>();
+    }
+
+    RandomNumberGenerator rng(worldSettings->getSeed());
+
+    std::shared_ptr<City> city = std::make_shared<City>(worldSettings->getSeed(), *worldSettings, GameNameHolder::getRandomCityName(worldSettings->getSeed()));
+    instances.emplace_back(city);
+
+    int tempCount = worldSettings->getTavernCount() + worldSettings->getTavernCount()
+            * rng.generateFloat(-worldSettings->getAberration(), worldSettings->getAberration());
+    // Create taverns in the city
+    for (int i = 0; i < tempCount; ++i)
+    {
+        instances.emplace_back(city->CreateTavern());
+    }
+
+    tempCount = worldSettings->getSquareCount() + worldSettings->getSquareCount()
+            * rng.generateFloat(-worldSettings->getAberration(), worldSettings->getAberration());
+    // Create squares in the city
+    for (int i = 0; i < tempCount; ++i)
+    {
+        instances.emplace_back(city->CreateSquare());
+    }
+}
+
+void Game::setWorldSettings(WorldSettings* worldSettings)
+{
+    this->worldSettings.reset(worldSettings);
 }

@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <memory>
+#include <thread>
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
 #include "TimeSpace.h"
@@ -15,6 +16,8 @@
 #include "../UI/Headers/ListItem.h"
 #include "../UI/Headers/UIManager.h"
 #include "City.h"
+#include "GameNameHolder.h"
+#include "WorldSettings.h"
 
 class UIManager;
 
@@ -25,6 +28,11 @@ class Game
     std::vector<std::shared_ptr<Instance>> instances;
     std::vector<std::shared_ptr<Agent>> agents;
     TimeSpace::GameTimeSystem* gameTime;
+    std::unique_ptr<WorldSettings> worldSettings;
+    std::thread nextRoundThread;
+    bool isNextRoundThreadRunning = false;
+
+    void createWorld();
 
 public:
     Game();
@@ -34,7 +42,7 @@ public:
     void NextRound();
     void run();
 
-
+    void setWorldSettings(WorldSettings* worldSettings);
 };
 
 

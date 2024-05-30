@@ -34,6 +34,12 @@ add_executable(inf_project main.cpp
         Headers/City.h
         Source/Tavern.cpp
         Headers/Tavern.h
+        Source/Square.cpp
+        Headers/Square.h
+        Source/Profession.cpp
+        Headers/Profession.h
+        Source/WorldSettings.cpp
+        Headers/WorldSettings.h
 )
 
 target_link_libraries(inf_project PRIVATE sfml-graphics sfml-audio TGUI::TGUI)

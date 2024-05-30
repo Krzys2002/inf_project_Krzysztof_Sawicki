@@ -4,6 +4,8 @@
 
 #include "../Headers/InfoPanel.h"
 
+
+
 InfoPanel::InfoPanel(unsigned int numberOfLabels, unsigned int numberOfListBoxes, unsigned int numberOfButtons)
 {
     titleLabel = tgui::Label::create();
@@ -28,6 +30,7 @@ InfoPanel::InfoPanel(unsigned int numberOfLabels, unsigned int numberOfListBoxes
         labels[i]->setTextSize(12);
         labels[i]->setAutoLayout(tgui::AutoLayout::Top);
         labels[i]->setSize("90%", 18); // Reduce the width to 90% to make room for the margin
+        labels[i]->setMaximumTextWidth(400);
 
         labels[i]->setText("Label " + std::to_string(i));
         labels[i]->getRenderer()->setBorderColor(sf::Color::Black);
@@ -80,7 +83,13 @@ void InfoPanel::setTitle(const std::string& title)
 void InfoPanel::setLabel(unsigned int index, const std::string& text)
 {
     if (index < labels.size())
+    {
         labels[index]->setText(text);
+        labels[index]->setAutoSize(true);
+        labels[index]->setMaximumTextWidth(250);
+        labels[index]->setAutoLayout(tgui::AutoLayout::Top);
+
+    }
 }
 
 void InfoPanel::setButton(unsigned int index, const std::string& text)

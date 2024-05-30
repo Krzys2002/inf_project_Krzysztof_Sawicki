@@ -15,6 +15,13 @@ class Agent : public GameObject
 protected:
     std::shared_ptr<Instance> currentInstance;
     const unsigned int seed;
+
+    std::string description;
+
+    // Main professions of Agent
+    Professions mainProfession;
+    // Secondary professions of Agent
+    Professions secondaryProfession;
 public:
     // Constructor
     Agent(unsigned int seed, std::string name, std::shared_ptr<Instance> currentInstance);
@@ -24,15 +31,28 @@ public:
     ~Agent();
 
     // Update every Round
-    void RoundUpdate(TimeSpace::GameTimeSystem& gameTime) override;
+    void roundUpdate(TimeSpace::GameTimeSystem& gameTime) override;
 
     // Get the current instance
-    std::shared_ptr<Instance> GetCurrentInstance() const;
+    std::shared_ptr<Instance> getCurrentInstance() const;
     // get the seed of the agent
-    unsigned int GetSeed() const;
+    unsigned int getSeed() const;
 
     // Set the current instance
-    void SetInstance(std::shared_ptr<Instance> newInstance);
+    void setInstance(std::shared_ptr<Instance> newInstance);
+
+    // Get the main profession of the agent
+    Professions getMainProfession() const;
+    // Get the secondary profession of the agent
+    Professions getSecondaryProfession() const;
+
+    // Set the main profession of the agent
+    void setMainProfession(Professions profession);
+    // Set the secondary profession of the agent
+    void setSecondaryProfession(Professions profession);
+
+    // Get the description of the agent
+    std::string getDescription() const;
 };
 
 

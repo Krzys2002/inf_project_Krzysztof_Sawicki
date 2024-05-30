@@ -17,41 +17,48 @@ std::vector<unsigned int> Instance::getIDPool(unsigned int size)
     return pool;
 }
 
-Instance::Instance(unsigned int seed, std::string name, std::shared_ptr<Instance> parentInstance, bool hasIndependentPopulation) : GameObject(name), seed(seed)
+Instance::Instance(unsigned int seed, const WorldSettings& worldSettings, std::string name, std::shared_ptr<Instance> parentInstance, bool hasIndependentPopulation)
+: GameObject(name), seed(seed), worldSettings(worldSettings)
 {
     this->parentInstance = parentInstance;
     this->hasIndependentPopulation = hasIndependentPopulation;
-    RandomNumberGenerator rng(seed);
-    maxPopulation = rng.generate(100, 1000);
-    if(hasIndependentPopulation)
-    {
-        idPool = getIDPool(maxPopulation);
-        idUsed = std::vector<bool>(maxPopulation, false);
-    }
 }
 
-void Instance::Ready()
+
+std::string Instance::getDescription() const
+{
+    return description;
+}
+
+void Instance::setDescription(const std::string& description)
+{
+    this->description = description;
+}
+
+void Instance::ready()
 {
     // Ready
     // this check is necessary to set Ready only one time to any Agent
     if(hasIndependentPopulation)
     {
+
         // call Ready on all agents
         for (auto agent : busyAgents)
         {
-            agent->Ready();
+            agent->ready();
         }
     }
 }
 
-void Instance::RoundUpdate(TimeSpace::GameTimeSystem& gameTime)
+void Instance::roundUpdate(TimeSpace::GameTimeSystem& gameTime)
 {
     // RoundUpdate
+    dayCounter = gameTime.getDayFromStart();
     if(hasIndependentPopulation)
     {
         for (auto agent : busyAgents)
         {
-            agent->RoundUpdate(gameTime);
+            agent->roundUpdate(gameTime);
         }
     }
 }
@@ -61,7 +68,7 @@ std::vector<std::shared_ptr<Instance>> Instance::getChildrenInstances()
     return childrenInstances;
 }
 
-std::shared_ptr<Instance> Instance::GetParentInstance()
+std::shared_ptr<Instance> Instance::getParentInstance()
 {
     return parentInstance;
 }
@@ -70,6 +77,12 @@ std::shared_ptr<Agent> Instance::getFreeRandomAgent(unsigned int seed)
 {
     if(hasIndependentPopulation)
     {
+        if(idPool.empty())
+        {
+            idPool = getIDPool(maxPopulation);
+            idUsed = std::vector<bool>(maxPopulation, false);
+        }
+
         if (busyAgents.size() >= maxPopulation)
         {
             return nullptr;
@@ -80,7 +93,8 @@ std::shared_ptr<Agent> Instance::getFreeRandomAgent(unsigned int seed)
             seed++;
         }
 
-        auto agent = std::make_shared<Agent>(idPool[seed % maxPopulation], seed, GameNameHolder::GetRandomAgentName(seed),
+        auto agent = std::make_shared<Agent>(idPool[seed % maxPopulation], seed,
+                                             GameNameHolder::getRandomAgentName(seed),
                                              std::static_pointer_cast<Instance>(shared_from_this()));
         idUsed[seed % maxPopulation] = true;
         busyAgents.emplace_back(agent);
@@ -96,7 +110,7 @@ std::shared_ptr<Agent> Instance::getFreeRandomAgent(unsigned int seed)
         std::shared_ptr<Agent> agent = parentInstance->getFreeRandomAgent(seed);
         if(agent != nullptr)
         {
-            agent->SetInstance(std::static_pointer_cast<Instance>(shared_from_this()));
+            agent->setInstance(std::static_pointer_cast<Instance>(shared_from_this()));
             busyAgents.push_back(agent);
             return agent;
         }
@@ -121,7 +135,7 @@ void Instance::freeAllAgents()
 void Instance::freeAgent(std::shared_ptr<Agent> agent)
 {
     busyAgents.erase(std::remove(busyAgents.begin(), busyAgents.end(), agent), busyAgents.end());
-    idUsed[agent->GetSeed() % maxPopulation] = false;
+    idUsed[agent->getSeed() % maxPopulation] = false;
     agent.reset();
 }
 

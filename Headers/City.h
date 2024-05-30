@@ -8,18 +8,19 @@
 #include "Instance.h"
 #include "Tavern.h"
 #include "GameNameHolder.h"
+#include "Square.h"
 
 class City : public Instance
 {
 public:
     // Constructor
-    City(unsigned int seed, std::string name, std::shared_ptr<Instance> parentInstance = nullptr, bool hasIndependentPopulation = true);
+    City(unsigned int seed, const WorldSettings& worldSettings, std::string name, std::shared_ptr<Instance> parentInstance = nullptr, bool hasIndependentPopulation = true);
 
     // Destructor
     ~City();
 
     // Ready call on start of the game
-    void Ready() override;
+    void ready() override;
 
     // Method to get agent from the instance if any free agent is available with seed (if not it returns nullptr)
     std::shared_ptr<Agent> getFreeRandomAgent(unsigned int seed) override;
@@ -34,6 +35,10 @@ public:
     std::vector<std::shared_ptr<Agent>> getBusyAgents() const override;
 
     std::shared_ptr<Tavern> CreateTavern();
+    std::shared_ptr<Tavern> CreateTavern(unsigned int seed);
+
+    std::shared_ptr<Square> CreateSquare();
+    std::shared_ptr<Square> CreateSquare(unsigned int seed);
 };
 
 

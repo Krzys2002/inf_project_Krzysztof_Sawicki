@@ -4,9 +4,11 @@
 
 #include "../Headers/City.h"
 
-City::City(unsigned int seed, std::string name, std::shared_ptr<Instance> parentInstance, bool hasIndependentPopulation) : Instance(seed, name, parentInstance, hasIndependentPopulation)
+City::City(unsigned int seed, const WorldSettings& worldSettings, std::string name, std::shared_ptr<Instance> parentInstance, bool hasIndependentPopulation) : Instance(seed, worldSettings, name, parentInstance, hasIndependentPopulation)
 {
-    // Constructor
+    RandomNumberGenerator rng(seed);
+    maxPopulation = worldSettings.getCityPopulation() + (worldSettings.getCityPopulation()
+            * rng.generateFloat(-worldSettings.getAberration(), worldSettings.getAberration()));
 }
 
 City::~City()
@@ -14,7 +16,7 @@ City::~City()
     // Destructor
 }
 
-void City::Ready()
+void City::ready()
 {
     // Ready
 }
@@ -54,12 +56,36 @@ std::shared_ptr<Agent> City::getFreeRandomAgent(unsigned int seed)
     return Instance::getFreeRandomAgent(seed);
 }
 
-std::shared_ptr<Tavern> City::CreateTavern()
+std::shared_ptr<Tavern> City::CreateTavern(unsigned int seed)
 {
     // Method to create tavern
-    auto tavern = std::make_shared<Tavern>(seed + childrenInstances.size(), GameNameHolder::GetRandomTavernName(seed + childrenInstances.size()), std::static_pointer_cast<Instance>(shared_from_this()));
+    auto tavern = std::make_shared<Tavern>(seed, worldSettings, GameNameHolder::getRandomTavernName(seed),
+                                           std::static_pointer_cast<Instance>(shared_from_this()));
     childrenInstances.push_back(tavern);
     return tavern;
+}
+
+std::shared_ptr<Tavern> City::CreateTavern()
+{
+    unsigned int seed = this->seed + childrenInstances.size() + dayCounter;
+    // Method to create tavern
+    return CreateTavern(seed);
+}
+
+std::shared_ptr<Square> City::CreateSquare(unsigned int seed)
+{
+    // Method to create square
+    auto square = std::make_shared<Square>(seed, worldSettings, GameNameHolder::getRandomSquareName(seed),
+                                           std::static_pointer_cast<Instance>(shared_from_this()));
+    childrenInstances.push_back(square);
+    return square;
+}
+
+std::shared_ptr<Square> City::CreateSquare()
+{
+    unsigned int seed = this->seed + childrenInstances.size() + dayCounter;
+    // Method to create square
+    return CreateSquare(seed);
 }
 
 

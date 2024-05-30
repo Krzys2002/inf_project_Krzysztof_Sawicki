@@ -32,17 +32,17 @@ GameObject::~GameObject()
     // Destructor
 }
 
-void GameObject::Ready()
+void GameObject::ready()
 {
     // Ready
 }
 
-void GameObject::Update(double deltaTime)
+void GameObject::update(double deltaTime)
 {
     // Update
 }
 
-void GameObject::RoundUpdate(TimeSpace::GameTimeSystem& gameTime)
+void GameObject::roundUpdate(TimeSpace::GameTimeSystem& gameTime)
 {
     // RoundUpdate
 }

@@ -12,6 +12,7 @@
 #include "InfoPanel.h"
 #include <map>
 
+
 enum MainPanelIndex
 {
     LEFT = 0,
@@ -30,6 +31,7 @@ class UIManager
     tgui::ScrollablePanel::Ptr panelRight;
     tgui::Panel::Ptr panelBottom;
     tgui::Panel::Ptr panelTop;
+    tgui::Panel::Ptr panelMask;
 
     //
     void configLeft(tgui::Panel::Ptr panel);
@@ -54,6 +56,11 @@ public:
     void setPanelToViewObjectInfoFor(MainPanelIndex formIndex, MainPanelIndex toIndex);
 
     tgui::Gui& getGui();
+
+    // lock the gui for the next round
+    void lockGui();
+    // unlock the gui after the next round
+    void unlockGui();
 };
 
 

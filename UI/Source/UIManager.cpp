@@ -55,6 +55,21 @@ void UIManager::MaskConfig()
 
 void UIManager::start()
 {
+    panelMask = tgui::Panel::create();
+    panelMask->setPosition(0, 0);
+    panelMask->setSize("100%", "100%");
+    panelMask->getRenderer()->setBackgroundColor(sf::Color(0, 0, 0, 100));
+    gui.add(panelMask);
+    panelMask->setVisible(false);
+
+    auto nextRoundLabel = tgui::Label::create();
+    nextRoundLabel->setText("Next Round is in progress...");
+    nextRoundLabel->setPosition("30%", "40%");
+    nextRoundLabel->setTextSize(30);
+    nextRoundLabel->getRenderer()->setTextColor(sf::Color::White);
+
+    panelMask->add(nextRoundLabel);
+
     panelLeft = ListPanel::create();
     configLeft(panelLeft);
     gui.add(panelLeft);
@@ -202,10 +217,12 @@ void UIManager::viewGameObjectInfo(MainPanelIndex indexOfPanel, std::weak_ptr<Ga
 
 void UIManager::viewAgentInfo(MainPanelIndex indexOfPanel, std::weak_ptr<Agent> agent)
 {
-    InfoPanel::Ptr temp = InfoPanel::create(3,0, 0);
+    InfoPanel::Ptr temp = InfoPanel::create(5,0, 0);
     temp->setLabel(0, "ID: " + std::to_string(agent.lock()->getID()));
     temp->setLabel(1, "Name: " + agent.lock()->getName());
-    temp->setLabel(2, "Current Instance: " + agent.lock()->GetCurrentInstance()->getName());
+    temp->setLabel(2, "Current Instance: " + agent.lock()->getCurrentInstance()->getName());
+    temp->setLabel(3, "Main Profession: " + professionToString(agent.lock()->getMainProfession()));
+    temp->setLabel(4, "Description: " + agent.lock()->getDescription());
     temp->setTitle("Agent Info");
 
     switch (indexOfPanel)
@@ -242,10 +259,11 @@ void UIManager::viewAgentInfo(MainPanelIndex indexOfPanel, std::weak_ptr<Agent> 
 
 void UIManager::viewInstanceInfo(MainPanelIndex indexOfPanel, std::weak_ptr<Instance> instance)
 {
-    InfoPanel::Ptr temp = InfoPanel::create(3,2, 2);
+    InfoPanel::Ptr temp = InfoPanel::create(5,2, 2);
     temp->setLabel(0, "ID: " + std::to_string(instance.lock()->getID()));
     temp->setLabel(1, "Name: " + instance.lock()->getName());
-    temp->setLabel(2, "Parent Instance: " + (instance.lock()->GetParentInstance() == nullptr ? "None" : instance.lock()->GetParentInstance()->getName()));
+    temp->setLabel(2, "Parent Instance: " + (instance.lock()->getParentInstance() == nullptr ? "None" : instance.lock()->getParentInstance()->getName()));
+    temp->setLabel(3, "Description: " + instance.lock()->getDescription());
     temp->setListBox(0, "Children Instances");
     temp->setButton(0, "View Children Instances");
     temp->setButtonCallback(0, [this, instance](){
@@ -341,4 +359,25 @@ void UIManager::setPanelToViewObjectInfoFor(MainPanelIndex formIndex, MainPanelI
     };
 
     listPanel->addFunctionOnSelected(function);
+}
+
+void UIManager::lockGui()
+{
+    panelBottom->setEnabled(false);
+    panelTop->setEnabled(false);
+    panelLeft->setEnabled(false);
+    panelMiddle->setEnabled(false);
+    panelRight->setEnabled(false);
+    panelMask->moveToFront();
+    panelMask->setVisible(true);
+}
+
+void UIManager::unlockGui()
+{
+    panelBottom->setEnabled(true);
+    panelTop->setEnabled(true);
+    panelLeft->setEnabled(true);
+    panelMiddle->setEnabled(true);
+    panelRight->setEnabled(true);
+    panelMask->setVisible(false);
 }

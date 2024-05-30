@@ -1,28 +1,24 @@
 //
-// Created by Krzysztof Sawicki on 28/05/2024.
+// Created by Krzysztof Sawicki on 30/05/2024.
 //
 
-#include "../Headers/Tavern.h"
+#include "../Headers/Square.h"
 
-Tavern::Tavern(unsigned int seed, const WorldSettings& worldSettings, std::string name, std::shared_ptr<Instance> parentInstance) : Instance(seed, worldSettings, name, parentInstance,false)
+Square::Square(unsigned int seed, const WorldSettings& worldSettings, std::string name, std::shared_ptr<Instance> parentInstance) : Instance(seed, worldSettings, name, parentInstance, false)
 {
     // Constructor
     RandomNumberGenerator rng(seed);
-    maxPopulation = worldSettings.getTavernPopulation() + (worldSettings.getTavernPopulation()
+    maxPopulation = worldSettings.getSquarePopulation() + (worldSettings.getSquarePopulation()
             * rng.generateFloat(-worldSettings.getAberration(), worldSettings.getAberration()));
 }
 
-Tavern::~Tavern()
+Square::~Square()
 {
     // Destructor
 }
 
-void Tavern::ready()
+void Square::ready()
 {
-    mainProfession = static_cast<Professions>(seed % static_cast<int>(Professions::NumberOfProfessions));
-    setDescription(GameNameHolder::getRandomTavernDescription(seed, mainProfession));
-
-
     for (int i = 0; i < maxPopulation; ++i)
     {
         auto agent = parentInstance->getFreeRandomAgent(seed + busyAgents.size());
@@ -30,14 +26,12 @@ void Tavern::ready()
         {
             agent->setInstance(std::static_pointer_cast<Instance>(shared_from_this()));
             busyAgents.push_back(agent);
-            agent->setMainProfession(mainProfession);
         }
     }
 }
 
-void Tavern::roundUpdate(TimeSpace::GameTimeSystem& gameTime)
+void Square::roundUpdate(TimeSpace::GameTimeSystem& gameTime)
 {
-    Instance::roundUpdate(gameTime);
     // Method to update every round
     for (auto& agent : busyAgents)
     {
@@ -47,7 +41,7 @@ void Tavern::roundUpdate(TimeSpace::GameTimeSystem& gameTime)
 
     for (int i = 0; i < maxPopulation; ++i)
     {
-        auto agent = parentInstance->getFreeRandomAgent((seed + dayCounter  + busyAgents.size()) * dayCounter);
+        auto agent = parentInstance->getFreeRandomAgent(seed + busyAgents.size() + gameTime.getDayFromStart());
         if (agent != nullptr)
         {
             agent->setInstance(std::static_pointer_cast<Instance>(shared_from_this()));

@@ -9,12 +9,16 @@
 #include "Agent.h"
 #include <string>
 #include <vector>
+#include "WorldSettings.h"
 
 class Agent;  // Forward declaration of Agent
 
 class Instance : public GameObject, public std::enable_shared_from_this<Instance>
 {
 protected:
+    std::string description;
+    const WorldSettings& worldSettings;
+    unsigned int dayCounter = 0;
     unsigned int seed;
     unsigned int maxPopulation;
     std::shared_ptr<Instance> parentInstance;
@@ -26,24 +30,29 @@ protected:
 
 public:
     // Constructor
-    Instance(unsigned int seed, std::string name, std::shared_ptr<Instance> parentInstance, bool hasIndependentPopulation = false);
+    Instance(unsigned int seed, const WorldSettings& worldSettings, std::string name, std::shared_ptr<Instance> parentInstance, bool hasIndependentPopulation = false);
 
     // Destructor
     ~Instance();
 
     // Ready call on start of the game
-    void Ready() override;
+    void ready() override;
 
     // RoundUpdate call on every round
-    void RoundUpdate(TimeSpace::GameTimeSystem& gameTime) override;
+    void roundUpdate(TimeSpace::GameTimeSystem& gameTime) override;
 
     // Get the parent instance
-    std::shared_ptr<Instance> GetParentInstance();
+    std::shared_ptr<Instance> getParentInstance();
     // Get the children instances
     std::vector<std::shared_ptr<Instance>> getChildrenInstances();
 
     // Method to reserve ID pool for agents
     static std::vector<unsigned int> getIDPool(unsigned int size);
+
+    // Get description of the instance
+    virtual std::string getDescription() const;
+    // Set description of the instance
+    virtual void setDescription(const std::string& description);
 
     // Method to get agent from the instance if any free agent is available with seed (if not it returns nullptr)
     virtual std::shared_ptr<Agent> getFreeRandomAgent(unsigned int seed);

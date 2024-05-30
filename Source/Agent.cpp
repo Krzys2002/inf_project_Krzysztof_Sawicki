@@ -14,7 +14,7 @@ Agent::Agent(unsigned int ID, unsigned int seed, std::string name, std::shared_p
     this->currentInstance = currentInstance;
 }
 
-unsigned int Agent::GetSeed() const
+unsigned int Agent::getSeed() const
 {
     return seed;
 }
@@ -24,18 +24,44 @@ Agent::~Agent()
     // Destructor
 }
 
-void Agent::RoundUpdate(TimeSpace::GameTimeSystem& gameTime)
+void Agent::roundUpdate(TimeSpace::GameTimeSystem& gameTime)
 {
     // RoundUpdate
 }
 
-std::shared_ptr<Instance> Agent::GetCurrentInstance() const
+std::shared_ptr<Instance> Agent::getCurrentInstance() const
 {
     return currentInstance;
 }
 
-void Agent::SetInstance(std::shared_ptr<Instance> newInstance)
+void Agent::setInstance(std::shared_ptr<Instance> newInstance)
 {
     currentInstance = newInstance;
+}
+
+Professions Agent::getMainProfession() const
+{
+    return mainProfession;
+}
+
+Professions Agent::getSecondaryProfession() const
+{
+    return secondaryProfession;
+}
+
+void Agent::setMainProfession(Professions profession)
+{
+    mainProfession = profession;
+    description = GameNameHolder::getRandomAgentDescription(seed, mainProfession);
+}
+
+void Agent::setSecondaryProfession(Professions profession)
+{
+    secondaryProfession = profession;
+}
+
+std::string Agent::getDescription() const
+{
+    return description;
 }
 

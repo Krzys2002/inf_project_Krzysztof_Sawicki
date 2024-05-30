@@ -5,10 +5,10 @@
 #ifndef INF_PROJECT_GAMEOBJECT_H
 #define INF_PROJECT_GAMEOBJECT_H
 
-#include "../Headers/TimeSpace.h"
+#include "TimeSpace.h"
 #include "../Source/RandomNumberGenerator.cpp"
 #include <string>
-#include "../Headers//GameNameHolder.h"
+#include "GameNameHolder.h"
 
 
 class GameObject
@@ -27,13 +27,13 @@ public:
     std::string getName() const;
 
     // call on the start of the game
-    virtual void Ready();
+    virtual void ready();
 
     // call every frame
-    virtual void Update(double deltaTime);
+    virtual void update(double deltaTime);
 
     // call every round (day)
-    virtual void RoundUpdate(TimeSpace::GameTimeSystem& gameTime);
+    virtual void roundUpdate(TimeSpace::GameTimeSystem& gameTime);
     ~GameObject();
 };
 

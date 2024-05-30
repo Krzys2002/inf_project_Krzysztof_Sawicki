@@ -9,18 +9,21 @@
 
 class Tavern : public Instance
 {
+    // main anent of profession of the Tavern
+    Professions mainProfession;
+    std::shared_ptr<Agent> tavernKeeper;
 public:
     // Constructor
-    Tavern(unsigned int seed, std::string name, std::shared_ptr<Instance> parentInstance = nullptr);
+    Tavern(unsigned int seed, const WorldSettings& worldSettings, std::string name, std::shared_ptr<Instance> parentInstance = nullptr);
 
     // Destructor
     ~Tavern();
 
     // Ready call on start of the game
-    void Ready() override;
+    void ready() override;
 
     // RoundUpdate call on every round
-    void RoundUpdate(TimeSpace::GameTimeSystem& gameTime) override;
+    void roundUpdate(TimeSpace::GameTimeSystem& gameTime) override;
 
 };
 
