@@ -16,6 +16,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 600), "Settings");
     WorldSettings* worldSettings = new WorldSettings();
     bool startGame = false;
+    float maxSliderValue = 5.0f;
 
     std::cout << worldSettings->getCityPopulationModifier() << std::endl;
 
@@ -29,7 +30,7 @@ int main()
     // Create a slider for the city population modifier
     auto cityPopulationModifierSlider = tgui::Slider::create();
     cityPopulationModifierSlider->setMinimum(0.1f);
-    cityPopulationModifierSlider->setMaximum(10.0f);
+    cityPopulationModifierSlider->setMaximum(maxSliderValue);
     cityPopulationModifierSlider->setStep(0.1f);
     cityPopulationModifierSlider->setValue(worldSettings->getCityPopulationModifier());
     cityPopulationModifierSlider->setPosition("10%", "10%");
@@ -55,7 +56,7 @@ int main()
     // Create a slider for the tavern population Modifier
     auto tavernPopulationSlider = tgui::Slider::create();
     tavernPopulationSlider->setMinimum(0.1f);
-    tavernPopulationSlider->setMaximum(10.0f);
+    tavernPopulationSlider->setMaximum(maxSliderValue);
     tavernPopulationSlider->setStep(0.1f);
     tavernPopulationSlider->setValue(worldSettings->getTavernPopulationModifier());
     tavernPopulationSlider->setPosition("10%", "20%");
@@ -81,7 +82,7 @@ int main()
     // Create a slider for the square population Modifier
     auto squarePopulationSlider = tgui::Slider::create();
     squarePopulationSlider->setMinimum(0.1f);
-    squarePopulationSlider->setMaximum(10.0f);
+    squarePopulationSlider->setMaximum(maxSliderValue);
     squarePopulationSlider->setStep(0.1f);
     squarePopulationSlider->setValue(worldSettings->getSquarePopulationModifier());
     squarePopulationSlider->setPosition("10%", "30%");
@@ -107,7 +108,7 @@ int main()
     // Create a slider for the square count Modifier
     auto squareCountSlider = tgui::Slider::create();
     squareCountSlider->setMinimum(0.1f);
-    squareCountSlider->setMaximum(10.0f);
+    squareCountSlider->setMaximum(maxSliderValue);
     squareCountSlider->setStep(0.1f);
     squareCountSlider->setValue(worldSettings->getSquareCountModifier());
     squareCountSlider->setPosition("10%", "40%");
@@ -133,7 +134,7 @@ int main()
     // Create a slider for the tavern count Modifier
     auto tavernCountSlider = tgui::Slider::create();
     tavernCountSlider->setMinimum(0.1f);
-    tavernCountSlider->setMaximum(10.0f);
+    tavernCountSlider->setMaximum(maxSliderValue);
     tavernCountSlider->setStep(0.1f);
     tavernCountSlider->setValue(worldSettings->getTavernCountModifier());
     tavernCountSlider->setPosition("10%", "50%");

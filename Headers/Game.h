@@ -31,6 +31,8 @@ class Game
     std::unique_ptr<WorldSettings> worldSettings;
     std::thread nextRoundThread;
     bool isNextRoundThreadRunning = false;
+    std::thread worldCreationThread;
+    bool isWorldCreated = false;
 
     void createWorld();
 
