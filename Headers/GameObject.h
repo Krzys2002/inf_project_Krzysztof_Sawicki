@@ -10,7 +10,6 @@
 #include <string>
 #include "GameNameHolder.h"
 
-
 class GameObject
 {
 protected:

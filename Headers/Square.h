@@ -7,14 +7,16 @@
 
 #include "Instance.h"
 
+class Instance;
+
 class Square : public Instance
 {
     // Task Table for the Squer
-    //std::vector<std::shared_ptr<Task>> taskTable;
+    std::vector<std::weak_ptr<Task>> taskTable;
 
 public:
     // Constructor
-    Square(unsigned int seed, const WorldSettings& worldSettings, std::string name, std::shared_ptr<Instance> parentInstance = nullptr);
+    Square(unsigned int seed, std::string name, std::shared_ptr<Instance> parentInstance = nullptr);
 
     // Destructor
     ~Square();

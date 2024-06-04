@@ -17,7 +17,6 @@ class Instance : public GameObject, public std::enable_shared_from_this<Instance
 {
 protected:
     std::string description;
-    const WorldSettings& worldSettings;
     unsigned int dayCounter = 0;
     unsigned int seed;
     unsigned int maxPopulation;
@@ -30,7 +29,7 @@ protected:
 
 public:
     // Constructor
-    Instance(unsigned int seed, const WorldSettings& worldSettings, std::string name, std::shared_ptr<Instance> parentInstance, bool hasIndependentPopulation = false);
+    Instance(unsigned int seed, std::string name, std::shared_ptr<Instance> parentInstance, bool hasIndependentPopulation = false);
 
     // Destructor
     ~Instance();
@@ -55,9 +54,9 @@ public:
     virtual void setDescription(const std::string& description);
 
     // Method to get agent from the instance if any free agent is available with seed (if not it returns nullptr)
-    virtual std::shared_ptr<Agent> getFreeRandomAgent(unsigned int seed);
+    virtual std::shared_ptr<Agent>& getFreeRandomAgent(unsigned int seed);
     // Method to get agent from the instance if any free agent is available (if not it returns nullptr)
-    virtual std::shared_ptr<Agent> getFreeRandomAgent();
+    virtual std::shared_ptr<Agent>& getFreeRandomAgent();
 
     // Method Free all agents from the instance
     virtual void freeAllAgents();
@@ -65,6 +64,9 @@ public:
     virtual void freeAgent(std::shared_ptr<Agent> agent);
     // Method to get all busy agents from the instance
     virtual std::vector<std::shared_ptr<Agent>> getBusyAgents() const;
+
+    // Transfer agent to another instance
+    virtual void transferAgent(std::shared_ptr<Agent> agent, std::shared_ptr<Instance> instance);
 };
 
 

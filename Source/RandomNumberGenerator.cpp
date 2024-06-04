@@ -35,6 +35,18 @@ public:
         rng.seed(seed);
     }
 
+    static int Generate()
+    {
+        RandomNumberGenerator rng;
+        return rng.generate();
+    }
+
+    static int Generate(int min, int max)
+    {
+        RandomNumberGenerator rng;
+        return rng.generate(min, max);
+    }
+
     // Generate a random number in the range [min, max]
     int generate(int min, int max)
     {

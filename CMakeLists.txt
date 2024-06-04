@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 find_package(TGUI 1.2.0 REQUIRED)
+find_package(nlohmann_json 3.2.0 REQUIRED)
 
 add_executable(inf_project main.cpp
         Source/GameObject.cpp
@@ -40,6 +41,16 @@ add_executable(inf_project main.cpp
         Headers/Profession.h
         Source/WorldSettings.cpp
         Headers/WorldSettings.h
+        Source/Task.cpp
+        Headers/Task.h
+        Source/MagicAbility.cpp
+        Headers/MagicAbility.h
+        Source/Spell.cpp
+        Headers/Spell.h
+        Source/MagicSchool.cpp
+        Headers/MagicSchool.h
+        Source/Teacher.cpp
+        Headers/Teacher.h
 )
 
-target_link_libraries(inf_project PRIVATE sfml-graphics sfml-audio TGUI::TGUI)
+target_link_libraries(inf_project PRIVATE sfml-graphics sfml-audio TGUI::TGUI nlohmann_json::nlohmann_json)

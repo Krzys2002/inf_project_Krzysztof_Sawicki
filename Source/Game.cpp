@@ -4,10 +4,13 @@
 
 #include "../Headers/Game.h"
 
+std::vector<Game::GameEvent> Game::gameEventsInRound;
+std::vector<std::shared_ptr<Spell>> Game::GameLoudObject::Spells;
 
 Game::Game()
 {
-
+    std::string path = "spells.json";
+    GameLoudObject::LoudSpellsFromFile(path);
 
 
 //    uiManager->ListGameObjectsOnPanel(MainPanelIndex::MIDDLE, title, gameObjects);
@@ -114,35 +117,109 @@ void Game::run()
 
 void Game::createWorld()
 {
-    if(worldSettings == nullptr)
-    {
-        worldSettings = std::make_unique<WorldSettings>();
-    }
+    RandomNumberGenerator rng(WorldSettings::GetSeed());
 
-    RandomNumberGenerator rng(worldSettings->getSeed());
-
-    std::shared_ptr<City> city = std::make_shared<City>(worldSettings->getSeed(), *worldSettings, GameNameHolder::getRandomCityName(worldSettings->getSeed()));
+    std::shared_ptr<City> city = std::make_shared<City>(WorldSettings::GetSeed(), GameNameHolder::getRandomCityName(
+            WorldSettings::GetSeed()));
     instances.emplace_back(city);
 
-    int tempCount = worldSettings->getTavernCount() + worldSettings->getTavernCount()
-            * rng.generateFloat(-worldSettings->getAberration(), worldSettings->getAberration());
+    int tempCount = WorldSettings::GetTavernCount() + WorldSettings::GetTavernCount()
+                                                      * rng.generateFloat(-WorldSettings::GetAberration(),
+                                                                          WorldSettings::GetAberration());
     // Create taverns in the city
     for (int i = 0; i < tempCount; ++i)
     {
         instances.emplace_back(city->CreateTavern());
     }
 
-    tempCount = worldSettings->getSquareCount() + worldSettings->getSquareCount()
-            * rng.generateFloat(-worldSettings->getAberration(), worldSettings->getAberration());
+    tempCount = WorldSettings::GetSquareCount() + WorldSettings::GetSquareCount()
+                                                  * rng.generateFloat(-WorldSettings::GetAberration(),
+                                                                      WorldSettings::GetAberration());
     // Create squares in the city
     for (int i = 0; i < tempCount; ++i)
     {
         instances.emplace_back(city->CreateSquare());
     }
 
+    //Create MagicSchool
+    for (int i = 0; i < WorldSettings::GetNumberOfEnemiesSchools(); i++)
+    {
+        instances.emplace_back(city->CreateMagicSchool());
+    }
+
 }
 
-void Game::setWorldSettings(WorldSettings* worldSettings)
+void Game::emitGameEvent(Game::GameEvent &event)
 {
-    this->worldSettings.reset(worldSettings);
+    gameEventsInRound.push_back(event);
 }
+
+void Game::GameEvent::execute(std::shared_ptr<Game> game)
+{
+    func(game);
+}
+
+std::weak_ptr<GameObject> Game::GameEvent::from()
+{
+    return gameObject.lock();
+}
+
+void Game::GameLoudObject::LoudSpellsFromFile(std::string &path)
+{
+    // Open the JSON file
+    std::ifstream file(path);
+
+    // Parse the JSON file
+    json j;
+    file >> j;
+
+    // Get the spells category
+    auto spells = j.at("spells");
+
+    // Loop over the spells in the JSON file
+    for (const auto& spell : spells)
+    {
+        // Get the type of the spell
+        std::string type = spell.at("type").get<std::string>();
+
+        // Create the appropriate spell based on the type
+        if (type == "attack")
+        {
+            Spells.push_back(std::make_shared<AttackSpell>(spell));
+        }
+        else if (type == "healing")
+        {
+            Spells.push_back(std::make_shared<HealingSpell>(spell));
+        }
+        else if (type == "defense")
+        {
+            Spells.push_back(std::make_shared<DefenseSpell>(spell));
+        }
+    }
+}
+
+std::vector<std::shared_ptr<Spell>>& Game::GameLoudObject::GetSpells()
+{
+    return Spells;
+}
+
+std::shared_ptr<Spell> Game::GameLoudObject::GetRandomSpell()
+{
+    return Spells[RandomNumberGenerator::Generate(0, Spells.size() - 1)];
+}
+
+std::shared_ptr<Spell> Game::GameLoudObject::GetSpellByName(std::string &name)
+{
+    auto findAt = std::find_if(Spells.begin(), Spells.end(), [&name](std::shared_ptr<Spell> spell){
+        return spell->getName() == name;
+    });
+
+    if(findAt != Spells.end())
+    {
+        return *findAt;
+    }
+
+    return nullptr;
+}
+
+

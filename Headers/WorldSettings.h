@@ -8,50 +8,58 @@
 
 class WorldSettings
 {
-    unsigned int seed = 0;
-    unsigned int cityPopulation = 10000;
-    float cityPopulationModifier = 1.0f;
-    unsigned int tavernCount = 15;
-    unsigned int tavernPopulation = 20;
-    float tavernPopulationModifier = 1.0f;
-    float tavernCountModifier = 1.0f;
-    unsigned int squareCount = 5;
-    unsigned int squarePopulation = 50;
-    float squarePopulationModifier = 1.0f;
-    float squareCountModifier = 1.0f;
+    static unsigned int seed;
+    static unsigned int cityPopulation;
+    static float cityPopulationModifier;
+    static unsigned int tavernCount;
+    static unsigned int tavernPopulation;
+    static float tavernPopulationModifier;
+    static float tavernCountModifier;
+    static unsigned int squareCount ;
+    static unsigned int squarePopulation;
+    static float squarePopulationModifier;
+    static float squareCountModifier;
+    static unsigned int taskExpireTime;
+    static unsigned int minTalentForSchool;
+    static unsigned int numberOfEnemiesSchools;
 
-    float aberration = 0.1f;
+    static float aberration;
 
 public:
-    WorldSettings() = default;
-    WorldSettings(unsigned int seed, unsigned int cityPopulation, float cityPopulationModifier, unsigned int tavernCount, unsigned int tavernPopulation, float tavernPopulationModifier, float tavernCountModifier, unsigned int squareCount, unsigned int squarePopulation, float squarePopulationModifier, float squareCountModifier);
-    unsigned int getSeed() const;
-    unsigned int getCityPopulation() const;
-    float getCityPopulationModifier() const;
-    unsigned int getTavernCount() const;
-    unsigned int getTavernPopulation() const;
-    float getTavernPopulationModifier() const;
-    float getTavernCountModifier() const;
-    unsigned int getSquareCount() const;
-    unsigned int getSquarePopulation() const;
-    float getSquarePopulationModifier() const;
-    float getSquareCountModifier() const;
-    float getAberration() const;
-    void setSeed(unsigned int seed);
-    void setCityPopulation(unsigned int cityPopulation);
-    void setCityPopulationModifier(float cityPopulationModifier);
-    void setTavernCount(unsigned int tavernCount);
-    void setTavernPopulation(unsigned int tavernPopulation);
-    void setTavernPopulationModifier(float tavernPopulationModifier);
-    void setTavernCountModifier(float tavernCountModifier);
-    void setSquareCount(unsigned int squareCount);
-    void setSquarePopulation(unsigned int squarePopulation);
-    void setSquarePopulationModifier(float squarePopulationModifier);
-    void setSquareCountModifier(float squareCountModifier);
-    void setAberration(float aberration);
-    ~WorldSettings();
+    static unsigned int GetSeed();
+    static unsigned int GetCityPopulation();
+    static float GetCityPopulationModifier();
+    static unsigned int GetTavernCount();
+    static unsigned int GetTavernPopulation();
+    static float GetTavernPopulationModifier();
+    static float GetTavernCountModifier();
+    static unsigned int GetSquareCount();
+    static unsigned int GetSquarePopulation();
+    static float GetSquarePopulationModifier();
+    static float GetSquareCountModifier();
+    static unsigned int GetTaskExpireTime();
+    static unsigned int GetMinTalentForSchool();
+    static unsigned int GetNumberOfEnemiesSchools();
+    static float GetAberration();
+    static void SetSeed(unsigned int seed);
+    static void SetCityPopulation(unsigned int cityPopulation);
+    static void SetCityPopulationModifier(float cityPopulationModifier);
+    static void SetTavernCount(unsigned int tavernCount);
+    static void SetTavernPopulation(unsigned int tavernPopulation);
+    static void SetTavernPopulationModifier(float tavernPopulationModifier);
+    static void SetTavernCountModifier(float tavernCountModifier);
+    static void SetSquareCount(unsigned int squareCount);
+    static void SetSquarePopulation(unsigned int squarePopulation);
+    static void SetSquarePopulationModifier(float squarePopulationModifier);
+    static void SetSquareCountModifier(float squareCountModifier);
+    static void SetTaskExpireTime(unsigned int taskExpireTime);
+    static void SetMinTalentForSchool(unsigned int minTalentForSchool);
+    static void SetNumberOfEnemiesSchools(unsigned int numberOfEnemiesSchools);
+    static void SetAberration(float aberration);
 
-    void ApplyModifiers();
+    static void ApplyModifiers();
+
+
 };
 
 

@@ -21,6 +21,7 @@ namespace GameNameHolder
     std::string getRandomTavernApothecaryDescription(unsigned int descriptionNumber);
     std::string getRandomTavernMageDescription(unsigned int descriptionNumber);
     std::string getRandomTavernMiscellaneousDescription(unsigned int descriptionNumber);
+    std::string getRandomMagicSchoolName(unsigned int nameNumber);
 
     std::string getRandomApothecaryDescription(unsigned int descriptionNumber);
     std::string getRandomHealerDescription(unsigned int descriptionNumber);

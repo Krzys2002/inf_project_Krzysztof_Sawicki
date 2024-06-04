@@ -14,11 +14,10 @@ int main()
 {
     Game game;
     sf::RenderWindow window(sf::VideoMode(800, 600), "Settings");
-    WorldSettings* worldSettings = new WorldSettings();
     bool startGame = false;
     float maxSliderValue = 5.0f;
 
-    std::cout << worldSettings->getCityPopulationModifier() << std::endl;
+    std::cout << WorldSettings::GetCityPopulationModifier() << std::endl;
 
     tgui::Gui gui{window};
     //Create a label for the city population modifier
@@ -32,14 +31,14 @@ int main()
     cityPopulationModifierSlider->setMinimum(0.1f);
     cityPopulationModifierSlider->setMaximum(maxSliderValue);
     cityPopulationModifierSlider->setStep(0.1f);
-    cityPopulationModifierSlider->setValue(worldSettings->getCityPopulationModifier());
+    cityPopulationModifierSlider->setValue(WorldSettings::GetCityPopulationModifier());
     cityPopulationModifierSlider->setPosition("10%", "10%");
     gui.add(cityPopulationModifierSlider);
 
     // Create a label for the city population modifier value
     auto cityPopulationModifierValueLabel = tgui::Label::create();
     cityPopulationModifierValueLabel->setPosition("60%", "10%");
-    cityPopulationModifierValueLabel->setText(std::to_string(worldSettings->getCityPopulationModifier()));
+    cityPopulationModifierValueLabel->setText(std::to_string(WorldSettings::GetCityPopulationModifier()));
     gui.add(cityPopulationModifierValueLabel);
 
     // Update the label whenever the slider value changes
@@ -58,14 +57,14 @@ int main()
     tavernPopulationSlider->setMinimum(0.1f);
     tavernPopulationSlider->setMaximum(maxSliderValue);
     tavernPopulationSlider->setStep(0.1f);
-    tavernPopulationSlider->setValue(worldSettings->getTavernPopulationModifier());
+    tavernPopulationSlider->setValue(WorldSettings::GetTavernPopulationModifier());
     tavernPopulationSlider->setPosition("10%", "20%");
     gui.add(tavernPopulationSlider);
 
     // Create a label for the tavern population modifier value
     auto tavernPopulationModifierValueLabel = tgui::Label::create();
     tavernPopulationModifierValueLabel->setPosition("60%", "20%");
-    tavernPopulationModifierValueLabel->setText(std::to_string(worldSettings->getTavernPopulationModifier()));
+    tavernPopulationModifierValueLabel->setText(std::to_string(WorldSettings::GetTavernPopulationModifier()));
     gui.add(tavernPopulationModifierValueLabel);
 
     // Update the label whenever the slider value changes
@@ -84,14 +83,14 @@ int main()
     squarePopulationSlider->setMinimum(0.1f);
     squarePopulationSlider->setMaximum(maxSliderValue);
     squarePopulationSlider->setStep(0.1f);
-    squarePopulationSlider->setValue(worldSettings->getSquarePopulationModifier());
+    squarePopulationSlider->setValue(WorldSettings::GetSquarePopulationModifier());
     squarePopulationSlider->setPosition("10%", "30%");
     gui.add(squarePopulationSlider);
 
     // Create a label for the square population modifier value
     auto squarePopulationModifierValueLabel = tgui::Label::create();
     squarePopulationModifierValueLabel->setPosition("60%", "30%");
-    squarePopulationModifierValueLabel->setText(std::to_string(worldSettings->getSquarePopulationModifier()));
+    squarePopulationModifierValueLabel->setText(std::to_string(WorldSettings::GetSquarePopulationModifier()));
     gui.add(squarePopulationModifierValueLabel);
 
     // Update the label whenever the slider value changes
@@ -110,14 +109,14 @@ int main()
     squareCountSlider->setMinimum(0.1f);
     squareCountSlider->setMaximum(maxSliderValue);
     squareCountSlider->setStep(0.1f);
-    squareCountSlider->setValue(worldSettings->getSquareCountModifier());
+    squareCountSlider->setValue(WorldSettings::GetSquareCountModifier());
     squareCountSlider->setPosition("10%", "40%");
     gui.add(squareCountSlider);
 
     // Create a label for the square count modifier value
     auto squareCountModifierValueLabel = tgui::Label::create();
     squareCountModifierValueLabel->setPosition("60%", "40%");
-    squareCountModifierValueLabel->setText(std::to_string(worldSettings->getSquareCountModifier()));
+    squareCountModifierValueLabel->setText(std::to_string(WorldSettings::GetSquareCountModifier()));
     gui.add(squareCountModifierValueLabel);
 
     // Update the label whenever the slider value changes
@@ -136,14 +135,14 @@ int main()
     tavernCountSlider->setMinimum(0.1f);
     tavernCountSlider->setMaximum(maxSliderValue);
     tavernCountSlider->setStep(0.1f);
-    tavernCountSlider->setValue(worldSettings->getTavernCountModifier());
+    tavernCountSlider->setValue(WorldSettings::GetTavernCountModifier());
     tavernCountSlider->setPosition("10%", "50%");
     gui.add(tavernCountSlider);
 
     // Create a label for the tavern count modifier value
     auto tavernCountModifierValueLabel = tgui::Label::create();
     tavernCountModifierValueLabel->setPosition("60%", "50%");
-    tavernCountModifierValueLabel->setText(std::to_string(worldSettings->getTavernCountModifier()));
+    tavernCountModifierValueLabel->setText(std::to_string(WorldSettings::GetTavernCountModifier()));
     gui.add(tavernCountModifierValueLabel);
 
     // Update the label whenever the slider value changes
@@ -158,11 +157,11 @@ int main()
     startGameButton->setPosition("10%", "90%");
     startGameButton->setSize("80%", "10%");
     startGameButton->onClick([&](){
-        worldSettings->setCityPopulationModifier(cityPopulationModifierSlider->getValue());
-        worldSettings->setTavernPopulationModifier(tavernPopulationSlider->getValue());
-        worldSettings->setSquarePopulationModifier(squarePopulationSlider->getValue());
-        worldSettings->setSquareCountModifier(squareCountSlider->getValue());
-        worldSettings->setTavernCountModifier(tavernCountSlider->getValue());
+        WorldSettings::SetCityPopulationModifier(cityPopulationModifierSlider->getValue());
+        WorldSettings::SetTavernPopulationModifier(tavernPopulationSlider->getValue());
+        WorldSettings::SetSquarePopulationModifier(squarePopulationSlider->getValue());
+        WorldSettings::SetSquareCountModifier(squareCountSlider->getValue());
+        WorldSettings::SetTavernCountModifier(tavernCountSlider->getValue());
         startGame = true;
         window.close();
     });
@@ -190,8 +189,7 @@ int main()
     {
         return 0;
     }
-    worldSettings->ApplyModifiers();
-    game.setWorldSettings(worldSettings);
+    WorldSettings::ApplyModifiers();
     game.start();
     game.run();
 

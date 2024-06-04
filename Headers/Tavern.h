@@ -7,6 +7,8 @@
 
 #include "Instance.h"
 
+class Instance;
+
 class Tavern : public Instance
 {
     // main anent of profession of the Tavern
@@ -14,7 +16,7 @@ class Tavern : public Instance
     std::shared_ptr<Agent> tavernKeeper;
 public:
     // Constructor
-    Tavern(unsigned int seed, const WorldSettings& worldSettings, std::string name, std::shared_ptr<Instance> parentInstance = nullptr);
+    Tavern(unsigned int seed, std::string name, std::shared_ptr<Instance> parentInstance = nullptr);
 
     // Destructor
     ~Tavern();

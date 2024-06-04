@@ -4,22 +4,20 @@
 
 #include "../Headers/Tavern.h"
 
-Tavern::Tavern(unsigned int seed, const WorldSettings& worldSettings, std::string name, std::shared_ptr<Instance> parentInstance) : Instance(seed, worldSettings, name, parentInstance,false)
+Tavern::Tavern(unsigned int seed, std::string name, std::shared_ptr<Instance> parentInstance) : Instance(seed, name, parentInstance,false)
 {
     // Constructor
     RandomNumberGenerator rng(seed);
-    maxPopulation = worldSettings.getTavernPopulation() + (worldSettings.getTavernPopulation()
-            * rng.generateFloat(-worldSettings.getAberration(), worldSettings.getAberration()));
+    maxPopulation = WorldSettings::GetTavernPopulation() + (WorldSettings::GetTavernPopulation()
+                                                           * rng.generateFloat(-WorldSettings::GetAberration(),
+                                                                               WorldSettings::GetAberration()));
 }
 
-Tavern::~Tavern()
-{
-    // Destructor
-}
+Tavern::~Tavern() = default;
 
 void Tavern::ready()
 {
-    mainProfession = static_cast<Professions>(seed % static_cast<int>(Professions::NumberOfProfessions));
+    mainProfession = static_cast<Professions>(seed % static_cast<int>(Professions::Count));
     setDescription(GameNameHolder::getRandomTavernDescription(seed, mainProfession));
 
 
@@ -52,6 +50,7 @@ void Tavern::roundUpdate(TimeSpace::GameTimeSystem& gameTime)
         {
             agent->setInstance(std::static_pointer_cast<Instance>(shared_from_this()));
             busyAgents.push_back(agent);
+            agent->createMagicAbility();
         }
     }
 }

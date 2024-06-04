@@ -18,7 +18,7 @@ enum class Professions
     Merchant,
     Miscellaneous,
     MagicStudent,
-    NumberOfProfessions
+    Count
 };
 
 std::string professionToString(Professions profession);

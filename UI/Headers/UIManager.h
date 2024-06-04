@@ -21,6 +21,8 @@ enum MainPanelIndex
 };
 
 class Game;
+class Agent;
+class Instance;
 
 class UIManager
 {

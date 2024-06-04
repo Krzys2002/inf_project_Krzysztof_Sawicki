@@ -199,6 +199,19 @@ namespace GameNameHolder
             "Mystic Meadow Plaza"
     };
 
+    std::vector<std::string> magicSchoolNames = {
+            "Arcane Academy",
+            "Mystic Institute of Magic",
+            "Celestial School of Enchantment",
+            "Eldritch College of Sorcery",
+            "Elemental Conservatory",
+            "Luminous Academy of Light Magic",
+            "Shadowfell School of Dark Arts",
+            "Frostpeak Institute of Ice Magic",
+            "Inferno Academy of Fire Magic",
+            "Verdant Grove School of Nature Magic"
+    };
+
 
 // Function to get a random agent name
     std::string getRandomAgentName(unsigned int nameNumber)
@@ -318,6 +331,12 @@ namespace GameNameHolder
     std::string getRandomSquareName(unsigned int nameNumber)
     {
         return squareNames[nameNumber % squareNames.size()];
+    }
+
+    // Function to get a random magic school name
+    std::string getRandomMagicSchoolName(unsigned int nameNumber)
+    {
+        return magicSchoolNames[nameNumber % magicSchoolNames.size()];
     }
 
 // Function to get a random Tavern description for profession

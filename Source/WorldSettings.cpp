@@ -5,142 +5,160 @@
 #include "../Headers/WorldSettings.h"
 
 
-WorldSettings::WorldSettings(unsigned int seed, unsigned int cityPopulation, float cityPopulationModifier, unsigned int tavernCount, unsigned int tavernPopulation, float tavernPopulationModifier, float tavernCountModifier, unsigned int squareCount, unsigned int squarePopulation, float squarePopulationModifier, float squareCountModifier)
+unsigned int WorldSettings::seed = 0;
+unsigned int WorldSettings::cityPopulation = 10000;
+float WorldSettings::cityPopulationModifier = 1.0f;
+unsigned int WorldSettings::tavernCount = 15;
+unsigned int WorldSettings::tavernPopulation = 20;
+float WorldSettings::tavernPopulationModifier = 1.0f;
+float WorldSettings::tavernCountModifier = 1.0f;
+unsigned int WorldSettings::squareCount = 5;
+unsigned int WorldSettings::squarePopulation = 50;
+float WorldSettings::squarePopulationModifier = 1.0f;
+float WorldSettings::squareCountModifier = 1.0f;
+unsigned int WorldSettings::taskExpireTime = 7;
+unsigned int WorldSettings::minTalentForSchool = 5;
+unsigned int WorldSettings::numberOfEnemiesSchools = 3;
+
+float WorldSettings::aberration = 0.1f;
+
+
+void WorldSettings::SetSeed(unsigned int seed)
 {
-    this->seed = seed;
-    this->cityPopulation = cityPopulation;
-    this->cityPopulationModifier = cityPopulationModifier;
-    this->tavernCount = tavernCount;
-    this->tavernPopulation = tavernPopulation;
-    this->tavernPopulationModifier = tavernPopulationModifier;
-    this->tavernCountModifier = tavernCountModifier;
-    this->squareCount = squareCount;
-    this->squarePopulation = squarePopulation;
-    this->squarePopulationModifier = squarePopulationModifier;
-    this->squareCountModifier = squareCountModifier;
+    WorldSettings::seed = seed;
 }
 
-WorldSettings::~WorldSettings()
+void WorldSettings::SetCityPopulation(unsigned int cityPopulation)
 {
-    // Destructor
+    WorldSettings::cityPopulation = cityPopulation;
 }
 
-void WorldSettings::setSeed(unsigned int seed)
+void WorldSettings::SetCityPopulationModifier(float cityPopulationModifier)
 {
-    this->seed = seed;
+    WorldSettings::cityPopulationModifier = cityPopulationModifier;
 }
 
-void WorldSettings::setCityPopulation(unsigned int cityPopulation)
+void WorldSettings::SetTavernCount(unsigned int tavernCount)
 {
-    this->cityPopulation = cityPopulation;
+    WorldSettings::tavernCount = tavernCount;
 }
 
-void WorldSettings::setCityPopulationModifier(float cityPopulationModifier)
+void WorldSettings::SetTavernPopulation(unsigned int tavernPopulation)
 {
-    this->cityPopulationModifier = cityPopulationModifier;
+    WorldSettings::tavernPopulation = tavernPopulation;
 }
 
-void WorldSettings::setTavernCount(unsigned int tavernCount)
+void WorldSettings::SetTavernPopulationModifier(float tavernPopulationModifier)
 {
-    this->tavernCount = tavernCount;
+    WorldSettings::tavernPopulationModifier = tavernPopulationModifier;
 }
 
-void WorldSettings::setTavernPopulation(unsigned int tavernPopulation)
+void WorldSettings::SetTavernCountModifier(float tavernCountModifier)
 {
-    this->tavernPopulation = tavernPopulation;
+    WorldSettings::tavernCountModifier = tavernCountModifier;
 }
 
-void WorldSettings::setTavernPopulationModifier(float tavernPopulationModifier)
+void WorldSettings::SetSquareCount(unsigned int squareCount)
 {
-    this->tavernPopulationModifier = tavernPopulationModifier;
+    WorldSettings::squareCount = squareCount;
 }
 
-void WorldSettings::setTavernCountModifier(float tavernCountModifier)
+void WorldSettings::SetSquarePopulation(unsigned int squarePopulation)
 {
-    this->tavernCountModifier = tavernCountModifier;
+    WorldSettings::squarePopulation = squarePopulation;
 }
 
-void WorldSettings::setSquareCount(unsigned int squareCount)
+void WorldSettings::SetSquarePopulationModifier(float squarePopulationModifier)
 {
-    this->squareCount = squareCount;
+    WorldSettings::squarePopulationModifier = squarePopulationModifier;
 }
 
-void WorldSettings::setSquarePopulation(unsigned int squarePopulation)
+void WorldSettings::SetSquareCountModifier(float squareCountModifier)
 {
-    this->squarePopulation = squarePopulation;
+    WorldSettings::squareCountModifier = squareCountModifier;
 }
 
-void WorldSettings::setSquarePopulationModifier(float squarePopulationModifier)
+void WorldSettings::SetAberration(float aberration)
 {
-    this->squarePopulationModifier = squarePopulationModifier;
+    WorldSettings::aberration = aberration;
 }
 
-void WorldSettings::setSquareCountModifier(float squareCountModifier)
-{
-    this->squareCountModifier = squareCountModifier;
-}
-
-void WorldSettings::setAberration(float aberration)
-{
-    this->aberration = aberration;
-}
-
-unsigned int WorldSettings::getSeed() const
+unsigned int WorldSettings::GetSeed()
 {
     return seed;
 }
 
-unsigned int WorldSettings::getCityPopulation() const
+unsigned int WorldSettings::GetCityPopulation()
 {
     return cityPopulation;
 }
 
-float WorldSettings::getCityPopulationModifier() const
+float WorldSettings::GetCityPopulationModifier()
 {
     return cityPopulationModifier;
 }
 
-unsigned int WorldSettings::getTavernCount() const
+unsigned int WorldSettings::GetTavernCount()
 {
     return tavernCount;
 }
 
-unsigned int WorldSettings::getTavernPopulation() const
+unsigned int WorldSettings::GetTavernPopulation()
 {
     return tavernPopulation;
 }
 
-float WorldSettings::getTavernPopulationModifier() const
+float WorldSettings::GetTavernPopulationModifier()
 {
     return tavernPopulationModifier;
 }
 
-float WorldSettings::getTavernCountModifier() const
+float WorldSettings::GetTavernCountModifier()
 {
     return tavernCountModifier;
 }
 
-unsigned int WorldSettings::getSquareCount() const
+unsigned int WorldSettings::GetSquareCount()
 {
     return squareCount;
 }
 
-unsigned int WorldSettings::getSquarePopulation() const
+unsigned int WorldSettings::GetSquarePopulation()
 {
     return squarePopulation;
 }
 
-float WorldSettings::getSquarePopulationModifier() const
+float WorldSettings::GetSquarePopulationModifier()
 {
     return squarePopulationModifier;
 }
 
-float WorldSettings::getSquareCountModifier() const
+float WorldSettings::GetSquareCountModifier()
 {
     return squareCountModifier;
 }
 
-float WorldSettings::getAberration() const
+unsigned int WorldSettings::GetMinTalentForSchool()
+{
+    return minTalentForSchool;
+}
+
+void WorldSettings::SetMinTalentForSchool(unsigned int minTalentForSchool)
+{
+    WorldSettings::minTalentForSchool = minTalentForSchool;
+}
+
+unsigned int WorldSettings::GetNumberOfEnemiesSchools()
+{
+    return numberOfEnemiesSchools;
+}
+
+void WorldSettings::SetNumberOfEnemiesSchools(unsigned int numberOfEnemiesSchools)
+{
+    WorldSettings::numberOfEnemiesSchools = numberOfEnemiesSchools;
+}
+
+float WorldSettings::GetAberration()
 {
     return aberration;
 }
@@ -157,4 +175,14 @@ void WorldSettings::ApplyModifiers()
     squareCountModifier = 1.0f;
     squarePopulation = static_cast<unsigned int>(squarePopulation * squarePopulationModifier);
     squarePopulationModifier = 1.0f;
+}
+
+void WorldSettings::SetTaskExpireTime(unsigned int taskExpireTime)
+{
+    WorldSettings::taskExpireTime = taskExpireTime;
+}
+
+unsigned int WorldSettings::GetTaskExpireTime()
+{
+    return taskExpireTime;
 }
