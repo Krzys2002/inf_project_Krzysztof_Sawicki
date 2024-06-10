@@ -35,9 +35,9 @@ void Teacher::roundUpdate(TimeSpace::GameTimeSystem& gameTime)
     for(auto student : students)
     {
         // Teach all spells
-        for(auto spell : magicAbility.getLearnedSpells())
+        for(auto spell : magicAbility->getLearnedSpells())
         {
-            student.lock()->getMagicAbility()->addExpToSpell(spell, magicAbility.getSpellProficiency(spell));
+            student.lock()->getMagicAbility()->addExpToSpell(spell, magicAbility->getSpellProficiency(spell));
         }
     }
 }

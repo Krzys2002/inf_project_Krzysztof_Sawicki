@@ -19,6 +19,13 @@ float WorldSettings::squareCountModifier = 1.0f;
 unsigned int WorldSettings::taskExpireTime = 7;
 unsigned int WorldSettings::minTalentForSchool = 5;
 unsigned int WorldSettings::numberOfEnemiesSchools = 3;
+std::map<GameLoudObject::ResourceType, unsigned int> WorldSettings::startingResources = {
+        {GameLoudObject::ResourceType::Gold, 100},
+        {GameLoudObject::ResourceType::MagicStone, 0}
+};
+std::string WorldSettings::playerHeroName = "Hero";
+std::string WorldSettings::playerMagicSchoolName = "Magic School";
+std::weak_ptr<Spell> WorldSettings::playerHeroSpell;
 
 float WorldSettings::aberration = 0.1f;
 
@@ -161,6 +168,46 @@ void WorldSettings::SetNumberOfEnemiesSchools(unsigned int numberOfEnemiesSchool
 float WorldSettings::GetAberration()
 {
     return aberration;
+}
+
+std::map<GameLoudObject::ResourceType, unsigned int> WorldSettings::GetStartingResources()
+{
+    return startingResources;
+}
+
+void WorldSettings::SetStartingResources(const std::map<GameLoudObject::ResourceType, unsigned int>& startingResources)
+{
+    WorldSettings::startingResources = startingResources;
+}
+
+void WorldSettings::SetPlayerHeroName(const std::string& playerHeroName)
+{
+    WorldSettings::playerHeroName = playerHeroName;
+}
+
+std::string WorldSettings::GetPlayerHeroName()
+{
+    return playerHeroName;
+}
+
+void WorldSettings::SetPlayerMagicSchoolName(const std::string& playerMagicSchoolName)
+{
+    WorldSettings::playerMagicSchoolName = playerMagicSchoolName;
+}
+
+std::string WorldSettings::GetPlayerMagicSchoolName()
+{
+    return playerMagicSchoolName;
+}
+
+void WorldSettings::SetPlayerHeroSpell(const std::weak_ptr<Spell>& playerHeroSpell)
+{
+    WorldSettings::playerHeroSpell = playerHeroSpell;
+}
+
+std::weak_ptr<Spell> WorldSettings::GetPlayerHeroSpell()
+{
+    return playerHeroSpell;
 }
 
 void WorldSettings::ApplyModifiers()

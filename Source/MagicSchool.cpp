@@ -3,6 +3,7 @@
 //
 
 #include "../Headers/MagicSchool.h"
+#include "../Headers/City.h"
 
 
 MagicSchool::MagicSchool(unsigned int seed, std::string name, std::shared_ptr<Instance> parentInstance) : Instance(seed, name, parentInstance)
@@ -57,6 +58,7 @@ void MagicSchool::CreateTeacher()
     std::shared_ptr<Agent>& agent = parentInstance->getFreeRandomAgent();
     std::shared_ptr<Teacher> teacher = agent->transformToTeacher();
     teachers.emplace_back(teacher);
+    busyAgents.emplace_back(teacher);
     teacher->setInstance(shared_from_this());
 
     agent = teacher;

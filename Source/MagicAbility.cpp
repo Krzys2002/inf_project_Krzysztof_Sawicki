@@ -17,14 +17,14 @@ void MagicAbility::addExpToSpell(std::weak_ptr<Spell> spell, int amount)
 {
     if(std::find(learnedSpells.begin(), learnedSpells.end(), spell.lock()) == learnedSpells.end())
     {
-        learnedSpells.push_back(spell.lock());
+        learnedSpells.emplace_back(spell.lock());
     }
 
     spellExp[spell.lock()] += amount * talent;
-    if (spellExp[spell.lock()] >= (spellProficiency[spell.lock()] * spell.lock()->getComplexity()) + 1)
+    while (spellExp[spell.lock()] >= (spellProficiency[spell.lock()] * spell.lock()->getComplexity()) + 1)
     {
         spellProficiency[spell.lock()]++;
-        spellExp[spell.lock()] = 0;
+        spellExp[spell.lock()] -= (spellProficiency[spell.lock()] * spell.lock()->getComplexity()) + 1;
     }
 }
 
@@ -35,6 +35,8 @@ int MagicAbility::getTalent() const
 
 int MagicAbility::getSpellProficiency(const std::weak_ptr<Spell>& spell) const
 {
+    if(spellProficiency.find(spell.lock()) == spellProficiency.end())
+        return 0;
     return spellProficiency.at(spell.lock());
 }
 

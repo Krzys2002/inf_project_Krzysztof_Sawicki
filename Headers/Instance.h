@@ -67,6 +67,8 @@ public:
 
     // Transfer agent to another instance
     virtual void transferAgent(std::shared_ptr<Agent> agent, std::shared_ptr<Instance> instance);
+    // addAgentToBusy
+    void addAgentToBusy(std::shared_ptr<Agent> agent);
 };
 
 

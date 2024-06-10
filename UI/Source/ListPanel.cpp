@@ -71,6 +71,49 @@ void ListPanel::addFunctionOnSelected(std::function<void(std::weak_ptr<GameObjec
     listBox->onItemSelect([this, function](int index){
         if(index < 0 || index >= items.size())
             return;
+        selected = index;
         function(items[index]);
     });
+}
+
+void ListPanel::addItem(std::weak_ptr<GameObject> item, const std::string &text)
+{
+    if(!item.lock())
+        return;
+    listBox->addItem(text);
+    items.emplace_back(item);
+}
+
+std::weak_ptr<GameObject> ListPanel::getSelected()
+{
+    if(selected < 0 || selected >= items.size())
+        return {};
+    return items[selected];
+}
+
+void ListPanel::removeItem(std::weak_ptr<GameObject> item)
+{
+    for(int i = 0; i < items.size(); i++)
+    {
+        if(items[i].lock() == item.lock())
+        {
+            listBox->removeItemByIndex(i);
+            items.erase(items.begin() + i);
+            return;
+
+            if(selected == i)
+                selected = -1;
+        }
+    }
+}
+
+void ListPanel::removeItem(int index)
+{
+    if(index < 0 || index >= items.size())
+        return;
+    listBox->removeItemByIndex(index);
+    items.erase(items.begin() + index);
+
+    if(selected == index)
+        selected = -1;
 }

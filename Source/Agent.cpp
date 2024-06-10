@@ -11,7 +11,6 @@ Agent::Agent(unsigned int seed, std::string name, std::shared_ptr<Instance> curr
 {
     this->currentInstance = currentInstance;
     auto rng = RandomNumberGenerator(seed);
-    magicAbility.setTalent(rng.generate(1, 10));
 }
 
 Agent::Agent(const Agent& agent) : GameObject(agent), seed(agent.seed)
@@ -97,20 +96,24 @@ bool Agent::hasTask() const
 
 std::shared_ptr<MagicAbility> Agent::getMagicAbility() const
 {
-    return std::make_shared<MagicAbility>(magicAbility);
+    return magicAbility;
 }
 
 std::shared_ptr<Task> Agent::createTask()
 {
     createdTask = std::make_shared<Task>(std::static_pointer_cast<Agent>(shared_from_this()),
-            seed * dayNumber + dayNumber, "Task", dayNumber);
+            seed * (dayNumber + 1) + dayNumber, "Task", dayNumber);
     return createdTask;
 }
 
 void Agent::createMagicAbility()
 {
     RandomNumberGenerator rng(seed + seed);
-    magicAbility = MagicAbility(rng.generate(1, 10));
+    // low tanlent chanse
+    int lowTalent = 60;
+
+
+    magicAbility = std::make_shared<MagicAbility>(rng.generate(1, 10));
 }
 
 std::shared_ptr<Teacher> Agent::transformToTeacher()

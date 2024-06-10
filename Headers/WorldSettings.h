@@ -5,6 +5,8 @@
 #ifndef INF_PROJECT_WORLDSETTINGS_H
 #define INF_PROJECT_WORLDSETTINGS_H
 
+#include <map>
+#include "GameLoudObjects.h"
 
 class WorldSettings
 {
@@ -22,6 +24,11 @@ class WorldSettings
     static unsigned int taskExpireTime;
     static unsigned int minTalentForSchool;
     static unsigned int numberOfEnemiesSchools;
+    // Player settings
+    static std::map<GameLoudObject::ResourceType, unsigned int> startingResources;
+    static std::string playerHeroName;
+    static std::string playerMagicSchoolName;
+    static std::weak_ptr<Spell> playerHeroSpell;
 
     static float aberration;
 
@@ -40,6 +47,10 @@ public:
     static unsigned int GetTaskExpireTime();
     static unsigned int GetMinTalentForSchool();
     static unsigned int GetNumberOfEnemiesSchools();
+    static std::map<GameLoudObject::ResourceType, unsigned int> GetStartingResources();
+    static std::string GetPlayerHeroName();
+    static std::string GetPlayerMagicSchoolName();
+    static std::weak_ptr<Spell> GetPlayerHeroSpell();
     static float GetAberration();
     static void SetSeed(unsigned int seed);
     static void SetCityPopulation(unsigned int cityPopulation);
@@ -55,6 +66,10 @@ public:
     static void SetTaskExpireTime(unsigned int taskExpireTime);
     static void SetMinTalentForSchool(unsigned int minTalentForSchool);
     static void SetNumberOfEnemiesSchools(unsigned int numberOfEnemiesSchools);
+    static void SetStartingResources(const std::map<GameLoudObject::ResourceType, unsigned int>& startingResources);
+    static void SetPlayerHeroName(const std::string& playerHeroName);
+    static void SetPlayerMagicSchoolName(const std::string& playerMagicSchoolName);
+    static void SetPlayerHeroSpell(const std::weak_ptr<Spell>& playerHeroSpell);
     static void SetAberration(float aberration);
 
     static void ApplyModifiers();

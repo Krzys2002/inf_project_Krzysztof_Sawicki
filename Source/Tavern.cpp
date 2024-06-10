@@ -29,6 +29,7 @@ void Tavern::ready()
             agent->setInstance(std::static_pointer_cast<Instance>(shared_from_this()));
             busyAgents.push_back(agent);
             agent->setMainProfession(mainProfession);
+            agent->createMagicAbility();
         }
     }
 }
@@ -50,6 +51,7 @@ void Tavern::roundUpdate(TimeSpace::GameTimeSystem& gameTime)
         {
             agent->setInstance(std::static_pointer_cast<Instance>(shared_from_this()));
             busyAgents.push_back(agent);
+            agent->setMainProfession(mainProfession);
             agent->createMagicAbility();
         }
     }

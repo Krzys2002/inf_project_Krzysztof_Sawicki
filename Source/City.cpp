@@ -3,6 +3,8 @@
 //
 
 #include "../Headers/City.h"
+#include "../Headers/Game.h"
+#include "../Headers/PlayerMagicSchool.h"
 
 City::City(unsigned int seed, std::string name, std::shared_ptr<Instance> parentInstance, bool hasIndependentPopulation) : Instance(seed, name, parentInstance, hasIndependentPopulation)
 {
@@ -155,6 +157,7 @@ std::shared_ptr<MagicSchool> City::CreateMagicSchool(unsigned int seed)
     // Method to create magic school
     auto magicSchool = std::make_shared<MagicSchool>(seed, GameNameHolder::getRandomMagicSchoolName(seed),
                                                      std::static_pointer_cast<Instance>(shared_from_this()));
+    magicSchool->addSpell(GameLoudObject::GetRandomSpell());
 
     magicSchool->CreateTeacher();
     magicSchool->setMinTalent(WorldSettings::GetMinTalentForSchool());
@@ -167,6 +170,55 @@ std::shared_ptr<MagicSchool> City::CreateMagicSchool()
     unsigned int seed = this->seed + childrenInstances.size() + dayCounter;
     // Method to create magic school
     return CreateMagicSchool(seed);
+}
+
+std::shared_ptr<PlayerMagicSchool> City::CreatePlayerMagicSchool()
+{
+    // Method to create player magic school
+    auto playerMagicSchool = std::make_shared<PlayerMagicSchool>(seed, WorldSettings::GetPlayerMagicSchoolName(),
+                                                                std::static_pointer_cast<Instance>(shared_from_this()));
+
+    std::shared_ptr<Teacher> hero = std::make_shared<Teacher>(seed, WorldSettings::GetPlayerHeroName(),
+                                                          std::static_pointer_cast<Instance>(shared_from_this()));
+
+    hero->createMagicAbility();
+    hero->setMainProfession(Professions::Magical);
+    hero->getMagicAbility()->setTalent(10);
+    hero->getMagicAbility()->addExpToSpell(WorldSettings::GetPlayerHeroSpell(), 10);
+    while (hero->getMagicAbility()->getSpellProficiency(WorldSettings::GetPlayerHeroSpell()) < 60)
+    {
+        hero->getMagicAbility()->addExpToSpell(WorldSettings::GetPlayerHeroSpell(), 100);
+    }
+
+    playerMagicSchool->setHero(hero);
+
+    for(auto& spell : hero->getMagicAbility()->getLearnedSpells())
+    {
+        playerMagicSchool->addSpell(spell);
+    }
+
+    for(auto& resource : WorldSettings::GetStartingResources())
+    {
+        playerMagicSchool->addResource(static_cast<int>(resource.first), resource.second);
+    }
+
+    childrenInstances.emplace_back(playerMagicSchool);
+    return playerMagicSchool;
+}
+
+std::vector<std::shared_ptr<MagicSchool>> City::getMagicSchools()
+{
+    // Method to get all magic schools from the instance
+    std::vector<std::shared_ptr<MagicSchool>> magicSchools;
+    for(auto& instance : childrenInstances)
+    {
+        if(auto magicSchool = std::dynamic_pointer_cast<MagicSchool>(instance))
+        {
+            magicSchools.emplace_back(magicSchool);
+        }
+    }
+
+    return magicSchools;
 }
 
 

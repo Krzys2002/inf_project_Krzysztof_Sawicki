@@ -1,0 +1,25 @@
+# ninja log v6
+8	407	1717487979376581404	CMakeFiles/inf_project.dir/Source/RandomNumberGenerator.cpp.o	acbbfd11f8482a78
+8	419	1717487979376411780	CMakeFiles/inf_project.dir/Source/TimeSpace.cpp.o	93d83a0e8b018c7c
+8	916	1717487979377101358	CMakeFiles/inf_project.dir/Source/GameNameHolder.cpp.o	1f954ce5d8311daf
+9	1358	1717487979378194682	CMakeFiles/inf_project.dir/UI/Source/ListPanel.cpp.o	cfcd7edbe2e98d6f
+9	2007	1717487979377971434	CMakeFiles/inf_project.dir/UI/Source/UIManager.cpp.o	dd4fe72b91f03fad
+9	1139	1717487979377264815	CMakeFiles/inf_project.dir/UI/Source/ListItem.cpp.o	1f80500bf3a10dd
+9	1060	1717487979377471605	CMakeFiles/inf_project.dir/UI/Source/CustomClickableWidget.cpp.o	8279108123f8a1f4
+1060	1343	1717487980428555803	CMakeFiles/inf_project.dir/Source/Profession.cpp.o	57d42fe20632d05e
+1139	1174	1717487980507909164	CMakeFiles/inf_project.dir/Source/WorldSettings.cpp.o	c043e3196520400
+7	432	1717487979376108866	CMakeFiles/inf_project.dir/Source/GameObject.cpp.o	721e9b881a88b637
+436	1479	1717487979804405583	CMakeFiles/inf_project.dir/Source/Tavern.cpp.o	eedd1185c7db4173
+8	1146	1717487979376750319	CMakeFiles/inf_project.dir/Source/Instance.cpp.o	652a18a4e4ba6a49
+916	1885	1717487980285200542	CMakeFiles/inf_project.dir/Source/Square.cpp.o	db08a753c9199c0a
+9	2586	1717487979377702270	CMakeFiles/inf_project.dir/Source/Game.cpp.o	7cb788fc5de4227a
+6	1951	1717487979374523754	CMakeFiles/inf_project.dir/main.cpp.o	8f81afdb9f23a538
+407	1791	1717487979776125894	CMakeFiles/inf_project.dir/UI/Source/InfoPanel.cpp.o	43dd97e37ed33751
+419	1699	1717487979787992256	CMakeFiles/inf_project.dir/Source/City.cpp.o	f989beb437eab02
+1147	1999	1717487980515797475	CMakeFiles/inf_project.dir/Source/MagicAbility.cpp.o	f285326b6ca4ddd9
+1358	2188	1717487980727024941	CMakeFiles/inf_project.dir/Source/Teacher.cpp.o	4cc5abf468a8dbc9
+1174	2040	1717487980543207630	CMakeFiles/inf_project.dir/Source/Spell.cpp.o	b6f7f822951b02dd
+1343	2262	1717487980711653273	CMakeFiles/inf_project.dir/Source/MagicSchool.cpp.o	1aedb975f181f7de
+8	1147	1717487979376912401	CMakeFiles/inf_project.dir/Source/Agent.cpp.o	e531e73de2598fd8
+1146	2487	1717487980514609027	CMakeFiles/inf_project.dir/Source/Task.cpp.o	117c26b41c1c3beb
+2587	2621	1717487981955344920	inf_project	3be97b1803fcd133

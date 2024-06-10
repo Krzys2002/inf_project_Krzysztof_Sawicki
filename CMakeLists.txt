@@ -51,6 +51,10 @@ add_executable(inf_project main.cpp
         Headers/MagicSchool.h
         Source/Teacher.cpp
         Headers/Teacher.h
+        Source/PlayerMagicSchool.cpp
+        Headers/PlayerMagicSchool.h
+        Source/GameLoudObjects.cpp
+        Headers/GameLoudObjects.h
 )
 
 target_link_libraries(inf_project PRIVATE sfml-graphics sfml-audio TGUI::TGUI nlohmann_json::nlohmann_json)

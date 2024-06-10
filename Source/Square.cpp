@@ -3,6 +3,7 @@
 //
 
 #include "../Headers/Square.h"
+#include "../Headers/Game.h"
 
 Square::Square(unsigned int seed, std::string name, std::shared_ptr<Instance> parentInstance) : Instance(seed, name, parentInstance, false)
 {
@@ -68,4 +69,18 @@ void Square::roundUpdate(TimeSpace::GameTimeSystem& gameTime)
             }), taskTable.end());
         }
     }
+
+//    std::function<void(Game*)> func = [](Game* game){
+//        std::cout << "test";
+////        auto player = std::dynamic_pointer_cast<PlayerMagicSchool>(game->getPlayerMagicSchool());
+//        //player->addResource(static_cast<int>(GameLoudObject::ResourceType::Gold), reward[static_cast<int>(GameLoudObject::ResourceType::Gold)]);
+//        //player->addResource(static_cast<int>(GameLoudObject::ResourceType::MagicStone), reward[static_cast<int>(GameLoudObject::ResourceType::MagicStone)]);
+//    };
+//    Game::GameEvent event = Game::GameEvent(func, std::static_pointer_cast<Instance>(shared_from_this()));
+//    Game::emitGameEvent(event);
+}
+
+std::vector<std::weak_ptr<Task>> Square::getTasks()
+{
+    return taskTable;
 }

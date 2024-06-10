@@ -22,9 +22,9 @@
 #include "Instance.h"
 #include "../UI/Headers/ListItem.h"
 #include "../UI/Headers/UIManager.h"
-#include "City.h"
 #include "GameNameHolder.h"
 #include "WorldSettings.h"
+#include "City.h"
 
 
 using json = nlohmann::json;
@@ -33,6 +33,7 @@ class UIManager;
 class Instance;
 class Agent;
 class GameObject;
+class MagicSchool;
 
 
 class Game : public std::enable_shared_from_this<Game>
@@ -51,6 +52,10 @@ private:
     bool isNextRoundThreadRunning = false;
     std::thread worldCreationThread;
     bool isWorldCreated = false;
+    bool stopFlag = false;
+
+    std::shared_ptr<City> city;
+    std::shared_ptr<Instance> playerMagicSchool;
 
     void createWorld();
 
@@ -59,40 +64,16 @@ public:
     class GameEvent
     {
     private:
-        std::function<void(std::shared_ptr<Game>)> func;
-        std::weak_ptr<GameObject> gameObject;
+        std::function<void(Game*)> func;
+        std::shared_ptr<GameObject> gameObject;
 
     public:
-        GameEvent(std::function<void(std::shared_ptr<Game>)> func, std::shared_ptr<GameObject> gameObject)
-                : func(std::move(func)), gameObject(std::move(gameObject)) {}
+        GameEvent(std::function<void(Game*)> func, std::shared_ptr<GameObject> gameObject)
+                : func(func), gameObject(std::move(gameObject)) {}
 
-        void execute(std::shared_ptr<Game> game);
+        void execute(Game* game);
 
         std::weak_ptr<GameObject> from();
-    };
-
-    class GameLoudObject
-    {
-        // Spells
-        static std::vector<std::shared_ptr<Spell>> Spells;
-
-
-    public:
-        // Load spells from file
-        static void LoudSpellsFromFile(std::string& path);
-
-        // Get spells
-        static std::vector<std::shared_ptr<Spell>>& GetSpells();
-        static std::shared_ptr<Spell> GetRandomSpell();
-        static std::shared_ptr<Spell> GetSpellByName(std::string& name);
-
-        // Resources
-        enum class ResourceType
-        {
-            Gold,
-            MagicStone,
-            Count
-        };
     };
 
     static void emitGameEvent(Game::GameEvent& event);
@@ -100,9 +81,16 @@ public:
     Game();
     ~Game();
 
+    std::shared_ptr<City> getCity();
+    std::shared_ptr<Instance> getPlayerMagicSchool();
+
+    bool isWorldCreatedFlag();
+    bool isNextRoundThreadRunningFlag();
+
     void start();
     void NextRound();
     void run();
+    std::vector<Game::GameEvent> getGameEventsInRound();
 };
 
 

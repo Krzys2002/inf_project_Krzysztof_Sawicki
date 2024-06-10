@@ -1,0 +1,33 @@
+{
+  "spells": [
+    {
+      "name": "fireBall",
+      "manaCost": 10,
+      "complexity": 5,
+      "type": "attack",
+      "damage": 20
+    },
+    {
+      "name": "waterBall",
+      "manaCost": 15,
+      "complexity": 7,
+      "type": "attack",
+      "damage": 25
+    },
+    {
+      "name": "heal",
+      "manaCost": 20,
+      "complexity": 10,
+      "type": "healing",
+      "power": 30
+    },
+    {
+      "name": "magicShield",
+      "manaCost": 25,
+      "complexity": 15,
+      "type": "defense",
+      "protection": 40,
+      "duration": 5
+    }
+  ]
+}

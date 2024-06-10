@@ -5,7 +5,7 @@
 #ifndef INF_PROJECT_MAGICSCHOOL_H
 #define INF_PROJECT_MAGICSCHOOL_H
 
-#include "City.h"
+#include "Instance.h"
 #include "Teacher.h"
 #include <vector>
 #include <memory>
@@ -13,6 +13,10 @@
 
 class MagicSchool : public Instance
 {
+    // minimum talent required to be a student
+    unsigned int minTalent;
+
+protected:
     // Teachers of the Magic School
     std::vector<std::shared_ptr<Teacher>> teachers;
     // Students of the Magic School
@@ -20,10 +24,7 @@ class MagicSchool : public Instance
     // Spellbook of the Magic School
     std::vector<std::weak_ptr<Spell>> spellbook;
 
-    // minimum talent required to be a student
-    unsigned int minTalent;
-
-    public:
+public:
     // Constructor
     MagicSchool(unsigned int seed, std::string name, std::shared_ptr<Instance> parentInstance = nullptr);
 
@@ -45,7 +46,7 @@ class MagicSchool : public Instance
     unsigned int getMinTalent() const;
 
     void setMinTalent(unsigned int minTalent);
-    void addSpell(std::weak_ptr<Spell> spell);
+    virtual void addSpell(std::weak_ptr<Spell> spell);
 };
 
 

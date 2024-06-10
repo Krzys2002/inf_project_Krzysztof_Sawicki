@@ -9,9 +9,10 @@
 #include "Tavern.h"
 #include "GameNameHolder.h"
 #include "Square.h"
-#include "MagicSchool.h"
+#include "PlayerMagicSchool.h"
 
 class MagicSchool;
+class PlayerMagicSchool;
 
 class City : public Instance
 {
@@ -49,9 +50,13 @@ public:
     std::shared_ptr<MagicSchool> CreateMagicSchool();
     std::shared_ptr<MagicSchool> CreateMagicSchool(unsigned int seed);
 
+    std::shared_ptr<PlayerMagicSchool> CreatePlayerMagicSchool();
+
     std::vector<std::shared_ptr<Tavern>> getTaverns();
 
     std::vector<std::shared_ptr<Square>> getSquares();
+
+    std::vector<std::shared_ptr<MagicSchool>> getMagicSchools();
 
 };
 

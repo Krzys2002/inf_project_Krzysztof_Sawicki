@@ -175,6 +175,11 @@ void Instance::transferAgent(std::shared_ptr<Agent> agent, std::shared_ptr<Insta
         freeAgent(agent);
     }
     busyAgents.erase(std::remove(busyAgents.begin(), busyAgents.end(), agent), busyAgents.end());
-    instance->busyAgents.emplace_back(agent);
+    instance->addAgentToBusy(agent);
     agent->setInstance(instance);
+}
+
+void Instance::addAgentToBusy(std::shared_ptr<Agent> agent)
+{
+    busyAgents.emplace_back(agent);
 }

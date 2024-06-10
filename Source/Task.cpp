@@ -43,8 +43,13 @@ void Task::makeProgress(std::weak_ptr<MagicAbility> ability)
     if(progress >= complexity)
     {
         Completed = true;
-        std::function<void(std::shared_ptr<Game>)> func = [this](std::shared_ptr<Game> game){
+
+
+        std::function<void(Game*)> func = [this](Game* game){
             std::cout << "Task completed by " << acceptedByAgent.lock()->getName() << std::endl;
+            auto player = std::dynamic_pointer_cast<PlayerMagicSchool>(game->getPlayerMagicSchool());
+            player->addResource(static_cast<int>(GameLoudObject::ResourceType::Gold), reward[static_cast<int>(GameLoudObject::ResourceType::Gold)]);
+            player->addResource(static_cast<int>(GameLoudObject::ResourceType::MagicStone), reward[static_cast<int>(GameLoudObject::ResourceType::MagicStone)]);
         };
         Game::GameEvent event = Game::GameEvent(func, std::static_pointer_cast<Task>(shared_from_this()));
         Game::emitGameEvent(event);
@@ -83,15 +88,15 @@ std::vector<int> Task::getReward() const
     return reward;
 }
 
-Task::Task(std::weak_ptr<Agent> fromAgent, unsigned int seed, const std::string& name, unsigned int dayNumber) : GameObject(name), reward(static_cast<int>(Game::GameLoudObject::ResourceType::Count), 0)
+Task::Task(std::weak_ptr<Agent> fromAgent, unsigned int seed, const std::string& name, unsigned int dayNumber) : GameObject(name), reward(static_cast<int>(GameLoudObject::ResourceType::Count), 0)
 {
     this->fromAgent = fromAgent;
     RandomNumberGenerator rng(seed);
     requiredProficiency = rng.generate(5, 95);
-    complexity = rng.generate(20, 100);
+    complexity = rng.generate(5, 50);
     creationDay = dayNumber;
-    requiredSpell = Game::GameLoudObject::GetRandomSpell();
-    int calculatedReward = requiredProficiency * complexity * 2;
+    requiredSpell = GameLoudObject::GetRandomSpell();
+    int calculatedReward = requiredProficiency * complexity/10;
 
     for (int i = 0; i < reward.size(); ++i)
     {

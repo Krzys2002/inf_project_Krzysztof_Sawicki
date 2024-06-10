@@ -15,9 +15,9 @@
 
 enum MainPanelIndex
 {
-    LEFT = 0,
-    MIDDLE = 1,
-    RIGHT = 2,
+    Recruit = 0,
+    AcceptTask = 1,
+    Distribut = 2,
 };
 
 class Game;
@@ -28,19 +28,29 @@ class UIManager
 {
     tgui::Gui gui;
     Game* game;
-    tgui::ScrollablePanel::Ptr panelLeft;
-    tgui::ScrollablePanel::Ptr panelMiddle;
-    tgui::ScrollablePanel::Ptr panelRight;
-    tgui::Panel::Ptr panelBottom;
-    tgui::Panel::Ptr panelTop;
+    tgui::Panel::Ptr mainPanel;
+//    tgui::ScrollablePanel::Ptr panelLeft;
+//    tgui::ScrollablePanel::Ptr panelMiddle;
+//    tgui::ScrollablePanel::Ptr panelRight;
+//    tgui::Panel::Ptr panelBottom;
+//    tgui::Panel::Ptr panelTop;
     tgui::Panel::Ptr panelMask;
 
-    //
-    void configLeft(tgui::Panel::Ptr panel);
-    void configRight(tgui::Panel::Ptr panel);
-    void configMiddle(tgui::Panel::Ptr panel);
+    MainPanelIndex currentMainPanelIndex = MainPanelIndex::Recruit;
 
-    void MaskConfig();
+    bool isGuiLocked = false;
+
+    //
+//    void configLeft(tgui::Panel::Ptr panel);
+//    void configRight(tgui::Panel::Ptr panel);
+//    void configMiddle(tgui::Panel::Ptr panel);
+
+    tgui::Panel::Ptr recruitPanel();
+    tgui::Panel::Ptr taskAcceptPanel();
+    tgui::Panel::Ptr taskDistributionPanel();
+
+    tgui::Panel::Ptr resorrcePanel();
+    tgui::Panel::Ptr massageWin(std::string &message);
 
 
 public:
@@ -48,19 +58,12 @@ public:
     ~UIManager();
 
     void start();
-    void ListGameObjectsOnPanel(MainPanelIndex panelIndex, std::string title, std::vector<std::weak_ptr<GameObject>>& gameObjects);
-
-    void viewObjectInfo(MainPanelIndex indexOfPanel, std::weak_ptr<GameObject> gameObject);
-    void viewGameObjectInfo(MainPanelIndex indexOfPanel, std::weak_ptr<GameObject> gameObject);
-    void viewAgentInfo(MainPanelIndex indexOfPanel, std::weak_ptr<Agent> agent);
-    void viewInstanceInfo(MainPanelIndex indexOfPanel, std::weak_ptr<Instance> instance);
-
-    void setPanelToViewObjectInfoFor(MainPanelIndex formIndex, MainPanelIndex toIndex);
+    void update(sf::Time deltaTime);
 
     tgui::Gui& getGui();
 
     // lock the gui for the next round
-    void lockGui();
+    void lockGui(std::string message);
     // unlock the gui after the next round
     void unlockGui();
 };

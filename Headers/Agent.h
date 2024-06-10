@@ -32,7 +32,7 @@ protected:
     std::shared_ptr<Task> createdTask;
 
     // magic ability of the agent
-    MagicAbility magicAbility;
+    std::shared_ptr<MagicAbility> magicAbility;
 
     // day number
     unsigned int dayNumber = 0;

@@ -26,6 +26,9 @@ public:
 
     // RoundUpdate call on every round
     void roundUpdate(TimeSpace::GameTimeSystem& gameTime) override;
+
+    // Method to get all tasks from the instance
+    std::vector<std::weak_ptr<Task>> getTasks();
 };
 
 
